@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from ctypes import c_ulong
 from typing import BinaryIO, List, Sequence, Dict
 import click
@@ -136,6 +138,6 @@ def main(lzw_filename, input_filename):
     write_codes_to_file(lzw_filename, encode_sequence)
 
 
-if __name__ == "__main__":
-    fire.Fire(main)
+# if __name__ == "__main__":
+#     fire.Fire(main)
 # main()
