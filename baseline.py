@@ -49,6 +49,14 @@ def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
         write_code(f, 0, 8)
 
 
+def read_file_header(filename: str) -> Iterable[str]:
+    with open(filename, "r", encoding="utf-8") as f:
+        filename = f.readline().strip()
+        while filename != "":
+            yield filename
+            filename = f.readline().strip()
+
+
 def read_codes_from_file(filename: str) -> List[int]:
     def read_code(f: BinaryIO, code_size: int) -> int:
         nonlocal buffer, buffer_load_bitsize
