@@ -3,7 +3,9 @@
 from ctypes import c_ulong
 from typing import BinaryIO, List, Sequence, Dict
 import click
-import fire
+# import fire
+# import argparse
+
 from pprint import PrettyPrinter
 
 print = PrettyPrinter().pprint
@@ -147,17 +149,23 @@ def lzw_decode(codes: List[int]) -> str:
     return decode_text
 
 
-# @click.command()
-# @click.option("-o", "lzw_filename", default="baseline_output", help="lzw_filenames")
-# @click.argument("input_filename")
-def main(lzw_filename, input_filename):
-    with open(input_filename, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    encode_sequence = lzw_encode(content)
-    write_codes_to_file(lzw_filename, encode_sequence)
+@click.group()
+def main():
+    pass
 
 
-# if __name__ == "__main__":
-#     fire.Fire(main)
-# main()
+@main.command()
+@click.argument("archive")
+@click.argument("files", nargs=-1)
+def compress(archive: str, files: List[str]):
+    raise NotImplementedError
+
+
+@main.command()
+@click.argument("archive")
+def decompress(archive: str):
+    raise NotImplementedError
+
+
+if __name__ == "__main__":
+    main()
