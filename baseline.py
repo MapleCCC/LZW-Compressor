@@ -1,22 +1,25 @@
 #!/usr/bin/env python3
 
 from ctypes import c_ulong
-from typing import BinaryIO, List, Sequence, Dict
+from pprint import PrettyPrinter
+from typing import BinaryIO, Iterable, List
+
 import click
+
 # import fire
 # import argparse
 
-from pprint import PrettyPrinter
-
-print = PrettyPrinter().pprint
-
 from code_dict import CodeDict
 from str_dict import StrDict
+from utils import *
 
 
 # TODO: add unit test
 # TODO: add feature supporting multiple input files
 # TODO: consider rewriting in lazy evaluation / generator style, so as to save runtime space cost
+
+
+print = PrettyPrinter().pprint
 
 CODE_BIT: int = 12
 VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
