@@ -61,6 +61,9 @@ def read_codes_from_file(filename: str) -> List[int]:
     def read_code(f: BinaryIO, code_size: int) -> int:
         nonlocal buffer, buffer_load_bitsize
 
+        if code_size > 32:
+            raise ValueError("code size should not be larger than 32 bits")
+
         while buffer_load_bitsize < code_size:
             offset = 32 - buffer_load_bitsize - 8
             byte = f.read(1)
