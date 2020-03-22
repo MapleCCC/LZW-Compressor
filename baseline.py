@@ -115,7 +115,7 @@ def lzw_decode(codes: List[int]) -> str:
     decode_text += str_dict[code]
     for code in codes[1:]:
         if code == VIRTUAL_EOF:
-            break
+            raise ValueError("Cannot decode EOF")
         if code in str_dict:
             str_dict.add_new_str(P + str_dict[code][0])
             P = str_dict[code]
