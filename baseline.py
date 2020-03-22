@@ -45,7 +45,7 @@ def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
         f.write(b"Ephesians_.txt" + b"\n\n")
         for code in codes:
             write_code(f, code, CODE_BIT)
-        write_code(f, VIRTUAL_EOF, CODE_BIT)
+        # Padded with 0 to flush the leftover bits in the buffer
         write_code(f, 0, 8)
 
 
@@ -115,6 +115,11 @@ def lzw_encode(text: str) -> List[int]:
     # print(sorted(code_dict._storage.items(), key=lambda x: x[1]))
 
     return encode_sequence
+
+
+def encode_file(filename: str) -> Sequence[int]:
+    with open(filename, "r", encoding="utf-8") as f:
+        return lzw_encode(f.read()) + [VIRTUAL_EOF]
 
 
 def lzw_decode(codes: List[int]) -> str:
