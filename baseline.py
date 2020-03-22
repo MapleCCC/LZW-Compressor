@@ -21,7 +21,7 @@ CODE_BIT: int = 12
 VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
 
 
-def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
+def write_codes_to_file(fp: BinaryIO, codes: Iterable[int]) -> None:
     def write_code(f: BinaryIO, code: int, code_size: int):
         nonlocal buffer, buffer_load_bitsize
 
@@ -42,13 +42,10 @@ def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
     buffer_load_bitsize = 0
     buffer = c_ulong(0)
 
-    with open(filename, "wb") as f:
-        # FIXME
-        f.write(b"Ephesians_.txt" + b"\n\n")
-        for code in codes:
-            write_code(f, code, CODE_BIT)
-        # Padded with 0 to flush the leftover bits in the buffer
-        write_code(f, 0, 8)
+    for code in codes:
+        write_code(fp, code, CODE_BIT)
+    # Padded with 0 to flush the leftover bits in the buffer
+    write_code(fp, 0, 8)
 
 
 def read_file_header(filename: str) -> Iterable[str]:
