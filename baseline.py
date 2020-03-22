@@ -59,6 +59,12 @@ def read_file_header(filename: str) -> Iterable[str]:
             _filename = f.readline().strip()
 
 
+def write_file_header(fp: BinaryIO, filenames: Iterable[str]) -> None:
+    for filename in filenames:
+        fp.write(filename.encode("ascii") + b"\n")
+    fp.write(b"\n")
+
+
 def read_codes_from_file(filename: str) -> List[int]:
     def read_code(f: BinaryIO, code_size: int) -> int:
         nonlocal buffer, buffer_load_bitsize
