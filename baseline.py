@@ -50,11 +50,11 @@ def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
 
 
 def read_file_header(filename: str) -> Iterable[str]:
-    with open(filename, "r", encoding="utf-8") as f:
-        filename = f.readline().strip()
-        while filename != "":
-            yield filename
-            filename = f.readline().strip()
+    with open(filename, "rb") as f:
+        _filename = f.readline().strip()
+        while _filename != b"":
+            yield _filename.decode("ascii")
+            _filename = f.readline().strip()
 
 
 def read_codes_from_file(filename: str) -> List[int]:
