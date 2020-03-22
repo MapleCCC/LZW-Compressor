@@ -55,7 +55,10 @@ def read_codes_from_file(filename: str) -> List[int]:
 
         while buffer_load_bitsize < code_size:
             offset = 32 - buffer_load_bitsize - 8
-            buffer = c_ulong(buffer.value | (ord(f.read(1)) << offset))
+            byte = f.read(1)
+            if not byte:
+                raise RuntimeError("File abruptly ends before VIRTUAL_EOF is detected")
+            buffer = c_ulong(buffer.value | (ord(byte) << offset))
             buffer_load_bitsize += 8
 
         code = buffer.value >> (32 - code_size)
