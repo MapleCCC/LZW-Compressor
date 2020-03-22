@@ -19,7 +19,7 @@ CODE_BIT: int = 12
 VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
 
 
-def write_codes_to_file(filename: str, codes: Sequence[int]) -> None:
+def write_codes_to_file(filename: str, codes: Iterable[int]) -> None:
     def write_code(f: BinaryIO, code: int, code_size: int):
         nonlocal buffer, buffer_load_bitsize
 
