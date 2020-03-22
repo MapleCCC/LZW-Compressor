@@ -161,13 +161,20 @@ def main():
 @click.argument("archive")
 @click.argument("files", nargs=-1)
 def compress(archive: str, files: List[str]):
-    raise NotImplementedError
+    codes = itertools.chain.from_iterable(encode_file(file) for file in files)
+    with open(archive, "wb") as f:
+        write_file_header(f, files)
+        write_codes_to_file(f, codes)
 
 
 @main.command()
 @click.argument("archive")
 def decompress(archive: str):
-    raise NotImplementedError
+    filenames = list(read_file_header(archive))
+    codes_list = list(isplit(read_codes_from_file(archive), VIRTUAL_EOF))
+    assert len(filenames) == len(codes_list)
+    for i, codes in enumerate(codes_list):
+        write_file_content(filenames[i], lzw_decode(codes))
 
 
 if __name__ == "__main__":
