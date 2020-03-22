@@ -16,6 +16,7 @@ from str_dict import StrDict
 
 # TODO: add unit test
 # TODO: add feature supporting multiple input files
+# TODO: consider rewriting in lazy evaluation / generator style, so as to save runtime space cost
 
 CODE_BIT: int = 12
 VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
@@ -88,6 +89,7 @@ def read_codes_from_file(filename: str) -> List[int]:
     buffer_load_bitsize = 0
 
     with open(filename, "rb") as f:
+        # Skip through file header
         filenames = []
         filename = f.readline().strip()
         while filename != b"":
@@ -119,8 +121,6 @@ def lzw_encode(text: str) -> List[int]:
             code_dict.add_new_code(P + char)
             P = char
     encode_sequence.append(code_dict[P])
-
-    # print(sorted(code_dict._storage.items(), key=lambda x: x[1]))
 
     return encode_sequence
 
