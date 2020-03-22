@@ -99,6 +99,7 @@ def lzw_encode(text: str) -> List[int]:
             encode_sequence.append(code_dict[P])
             code_dict.add_new_code(P + char)
             P = char
+    encode_sequence.append(code_dict[P])
 
     # print(sorted(code_dict._storage.items(), key=lambda x: x[1]))
 
