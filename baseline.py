@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from ctypes import c_ulong
 from pprint import PrettyPrinter
 from typing import BinaryIO, Iterable, List
@@ -17,6 +18,7 @@ from utils import *
 # TODO: add unit test
 # TODO: add feature supporting multiple input files
 # TODO: consider rewriting in lazy evaluation / generator style, so as to save runtime space cost
+# TODO: preserve newline format. Disable Python's builtin default universal newline support feature.
 
 
 print = PrettyPrinter().pprint
@@ -62,8 +64,8 @@ def read_file_header(filename: str) -> Iterable[str]:
 
 def write_file_header(fp: BinaryIO, filenames: Iterable[str]) -> None:
     for filename in filenames:
-        fp.write(filename.encode("ascii") + b"\n")
-    fp.write(b"\n")
+        fp.write((filename + os.linesep).encode("ascii"))
+    fp.write(os.linesep.encode("ascii"))
 
 
 def read_codes_from_file(filename: str) -> List[int]:
@@ -130,7 +132,7 @@ def lzw_encode(text: str) -> List[int]:
 
 
 def encode_file(filename: str) -> Sequence[int]:
-    with open(filename, "r", encoding="utf-8") as f:
+    with open(filename, "r", encoding="utf-8", newline="") as f:
         return lzw_encode(f.read()) + [VIRTUAL_EOF]
 
 
@@ -183,7 +185,7 @@ def decompress(archive: str):
     codes_list = list(isplit(read_codes_from_file(archive), VIRTUAL_EOF))
     assert len(filenames) == len(codes_list)
     for i, codes in enumerate(codes_list):
-        write_file_content(filenames[i], lzw_decode(codes))
+        write_file_content(filenames[i], lzw_decode(codes), newline="")
 
 
 if __name__ == "__main__":
