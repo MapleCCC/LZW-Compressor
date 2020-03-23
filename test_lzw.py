@@ -63,7 +63,7 @@ def test_compression(seed: int) -> None:
         # subprocess.run([EXPERIMENT_EXE, "-c", "output.lzw"] + test_files)
         subprocess.run([BASELINE_EXE, "compress", "output_baseline.lzw"] + test_files)
 
-        assert diff_file("output_baseline.lzw", "output_example.lzw")
+        assert diff_file("output_baseline.lzw", "output_example.lzw", is_binary=True)
 
 
 @pytest.mark.skip(reason="Not Yet Implemented")

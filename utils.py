@@ -2,19 +2,29 @@ import itertools
 from typing import *
 
 
-def read_file_content(filename: str) -> str:
-    with open(filename, "r", encoding="utf-8") as f:
-        return f.read()
+def read_file_content(filename: str, is_binary: bool = False) -> Union[str, bytes]:
+    if not is_binary:
+        with open(filename, "r", encoding="utf-8") as f:
+            return f.read()
+    else:
+        with open(filename, "rb") as f:
+            return f.read()
 
 
-def write_file_content(filename: str, text: str) -> None:
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(text)
+def write_file_content(
+    filename: str, text: Union[str, bytes], is_binary: bool = False
+) -> None:
+    if not is_binary:
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(text)
+    else:
+        with open(filename, "wb") as f:
+            f.write(text)
 
 
-def diff_file(filename1: str, filename2: str) -> int:
-    content1 = read_file_content(filename1)
-    content2 = read_file_content(filename2)
+def diff_file(filename1: str, filename2: str, is_binary: bool = False) -> int:
+    content1 = read_file_content(filename1, is_binary)
+    content2 = read_file_content(filename2, is_binary)
     return content1 == content2
 
 
