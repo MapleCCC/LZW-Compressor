@@ -167,6 +167,8 @@ def main():
 @click.argument("archive")
 @click.argument("files", nargs=-1)
 def compress(archive: str, files: List[str]):
+    if len(files) == 0:
+        raise ValueError("At least one file is needed to be compressed into archive")
     codes = itertools.chain.from_iterable(encode_file(file) for file in files)
     with open(archive, "wb") as f:
         write_file_header(f, files)
