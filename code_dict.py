@@ -25,7 +25,7 @@ class CodeDict:
 
     def clear(self) -> None:
         self._storage.clear()
-        self._size = 256
+        self._size = 0
 
         for i in range(256):
             self._storage[chr(i)] = i
