@@ -13,7 +13,7 @@ from lzwfile import (
     write_lzwfile_codes,
     write_lzwfile_header,
 )
-from utils import isplit
+from extra_itertools import isplit
 
 # import fire
 # import argparse
