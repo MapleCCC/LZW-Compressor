@@ -14,8 +14,9 @@ def remove_tail(iterable: Iterable, n: int = 1, store_tail: bool = True) -> Iter
         raise NotImplementedError
 
     lookahead = None
-    for elem in iterable:
-        yield lookahead
+    for i, elem in enumerate(iterable):
+        if i != 0:
+            yield lookahead
         lookahead = elem
 
     if store_tail:
