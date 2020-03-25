@@ -4,9 +4,9 @@ from tempfile import TemporaryDirectory
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from codec import *
-from utils import generate_gibberish, generate_gibberish_file, is_equal_file
-from extra_itertools import isplit
+from lzw.codec import *
+from lzw.utils import generate_gibberish, generate_gibberish_file, is_equal_file
+from lzw.extra_itertools import isplit
 
 MAX_FILE_LEN = 100
 

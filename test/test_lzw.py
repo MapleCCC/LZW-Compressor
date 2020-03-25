@@ -8,8 +8,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from codec import lzw_decode, lzw_encode
-from utils import *
+from lzw.codec import lzw_decode, lzw_encode
+from lzw.utils import *
 
 MAX_NUM_TEST_FILES = 10
 

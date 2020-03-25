@@ -1,9 +1,9 @@
 from itertools import chain
 from typing import *
 
-from code_dict import CodeDict
-from iostream import FileInStreamer, write_to_file_from_stream
-from str_dict import StrDict
+from .code_dict import CodeDict
+from .iostream import FileInStreamer, write_to_file_from_stream
+from .str_dict import StrDict
 
 Char = str
 Code = int

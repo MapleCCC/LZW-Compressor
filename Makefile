@@ -7,7 +7,7 @@ all: ${PROGS}
 lzw: lzw.c
 
 test:
-	pytest test_lzw.py
+	pytest test
 
 clean:
 	rm -f lzw

@@ -8,7 +8,7 @@ from ctypes import c_ulong
 from itertools import chain
 from typing import *
 
-from iostream import FileInStreamer
+from .iostream import FileInStreamer
 
 Entry = str
 Header = Iterable[Entry]

@@ -6,14 +6,14 @@ from typing import List
 
 import click
 
-from codec import decode_file, encode_file
-from lzwfile import (
+from .codec import decode_file, encode_file
+from .lzwfile import (
     read_lzwfile_codes,
     read_lzwfile_header,
     write_lzwfile_codes,
     write_lzwfile_header,
 )
-from extra_itertools import isplit
+from .extra_itertools import isplit
 
 # import fire
 # import argparse

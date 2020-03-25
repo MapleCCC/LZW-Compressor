@@ -1,6 +1,6 @@
 import random
-from extra_itertools import iequal
-from iostream import FileInStreamer
+from .extra_itertools import iequal
+from .iostream import FileInStreamer
 
 
 def generate_gibberish(length: int, charset) -> str:
