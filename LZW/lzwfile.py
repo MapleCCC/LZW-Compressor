@@ -101,7 +101,6 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
             # Skip through the header
             _filename = f.readline().strip()
             while _filename != b"":
-                yield _filename.decode("ascii")
                 _filename = f.readline().strip()
 
             f.truncate()
