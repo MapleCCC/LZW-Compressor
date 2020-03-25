@@ -2,6 +2,34 @@ from typing import *
 from itertools import groupby, zip_longest
 
 
+def remove_tail(iterable: Iterable, n: int = 1, store_tail: bool = True) -> Iterator:
+    """
+    Store tail in function object's attribute named "tail", for later refernce.
+    You can ask it to not store the tail, so as to save space,
+    by setting parameter store_tail to False.
+    Be aware that the tail storing behavior may give you surprising result when
+    you expect some references to be garbage collected.
+    """
+    if n != 1:
+        raise NotImplementedError
+
+    lookahead = None
+    for elem in iterable:
+        yield lookahead
+        lookahead = elem
+
+    if store_tail:
+        remove_tail.tail = lookahead
+
+
+def ijoin(separator: Iterable, *iterables: Iterable) -> Iterable:
+    sep = list(separator)
+    for iterable in remove_tail(iterables):
+        yield from iterable
+        yield from sep
+    yield from remove_tail.tail
+
+
 # The all_equal function comes from more-itertools library
 def all_equal(iterable: Iterable) -> bool:
     g = groupby(iterable)

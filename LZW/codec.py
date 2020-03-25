@@ -1,4 +1,3 @@
-from itertools import chain
 from typing import *
 
 from .code_dict import CodeDict
@@ -13,9 +12,8 @@ extended_ascii_encoding = "utf-8"
 
 
 def encode_file(filename: str, code_size: int) -> Iterable[int]:
-    VIRTUAL_EOF = 2 ** code_size - 1
     fs = FileInStreamer(filename, encoding=extended_ascii_encoding, newline="")
-    return chain(lzw_encode(fs, code_size), (VIRTUAL_EOF,))
+    return lzw_encode(fs, code_size)
 
 
 def decode_file(filename: str, codes: Iterable[Code], code_size: int) -> None:

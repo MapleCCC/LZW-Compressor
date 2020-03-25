@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-from itertools import chain
 from typing import List
 
 import click
@@ -13,7 +12,7 @@ from .lzwfile import (
     write_lzwfile_codes,
     write_lzwfile_header,
 )
-from .extra_itertools import isplit
+from .extra_itertools import isplit, ijoin
 
 # import fire
 # import argparse
@@ -44,7 +43,9 @@ def main():
 def compress(archive: str, files: List[str]):
     if len(files) == 0:
         raise ValueError("At least one file is needed to be compressed into archive")
-    codes = chain.from_iterable(encode_file(file, code_size=CODE_BIT) for file in files)
+    codes = ijoin(
+        [VIRTUAL_EOF], *(encode_file(file, code_size=CODE_BIT) for file in files)
+    )
     write_lzwfile_header(archive, files)
     write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
 
