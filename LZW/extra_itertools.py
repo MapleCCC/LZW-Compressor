@@ -23,7 +23,7 @@ def remove_tail(iterable: Iterable, n: int = 1, store_tail: bool = True) -> Iter
         remove_tail.tail = lookahead
 
 
-def ijoin(separator: Iterable, *iterables: Iterable) -> Iterable:
+def ijoin(separator: Iterable, iterables: Iterable[Iterable]) -> Iterable:
     sep = list(separator)
     for iterable in remove_tail(iterables):
         yield from iterable

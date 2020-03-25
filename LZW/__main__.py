@@ -44,7 +44,7 @@ def compress(archive: str, files: List[str]):
     if len(files) == 0:
         raise ValueError("At least one file is needed to be compressed into archive")
     codes = ijoin(
-        [VIRTUAL_EOF], *(encode_file(file, code_size=CODE_BIT) for file in files)
+        [VIRTUAL_EOF], (encode_file(file, code_size=CODE_BIT) for file in files)
     )
     write_lzwfile_header(archive, files)
     write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
