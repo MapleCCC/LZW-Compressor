@@ -49,7 +49,7 @@ def all_equal(iterable: Iterable) -> bool:
 def iequal(*iterables) -> int:
     """ Find if contents of all iterables are equal """
     _sentinel = object()
-    zipped = zip_longest(iterables, fillvalue=_sentinel)
+    zipped = zip_longest(*iterables, fillvalue=_sentinel)
     return all(map(lambda x: all_equal(x), zipped))
 
 
