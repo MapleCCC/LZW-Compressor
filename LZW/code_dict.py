@@ -1,7 +1,5 @@
 from typing import Dict
 
-# TODO: add max_len restriction to code dict
-# TODO: reserve the last code of code dict as virtual EOF
 # TODO: use trie as code dict internal data structure
 
 
@@ -16,12 +14,13 @@ class CodeDict:
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bit - 256 - 1
         self._size = 0
+        self._count = 0
 
         for i in range(256):
             self._storage[chr(i)] = i
 
     # Test if adding __slots__ actually accelerate or excerbate performance
-    __slots__ = ("_storage", "_capacity", "_size")
+    __slots__ = ("_storage", "_capacity", "_size", "_count")
 
     def clear(self) -> None:
         self._storage.clear()
@@ -30,23 +29,23 @@ class CodeDict:
         for i in range(256):
             self._storage[chr(i)] = i
 
-    def __contains__(self, item) -> bool:
+    def __contains__(self, item: str) -> bool:
         """ Check string membership """
         return item in self._storage
 
-    def __getitem__(self, key) -> int:
+    def __getitem__(self, key: str) -> int:
         try:
             return self._storage[key]
         except:
-            raise KeyError(f"code is missing for: {key}")
+            raise KeyError(f'code is missing for string: "{key}"')
 
-    def add_new_code(self, item) -> None:
+    def add_new_code(self, item: str) -> None:
         if self.__contains__(item):
             raise ValueError(f"{item} already in code dict")
 
-        if self._size == self._capacity:
-            raise NotImplementedError
-            # self.clear()
-
-        self._storage[item] = self._size + 256
+        self._storage[item] = self._count + 256
+        self._count += 1
         self._size += 1
+
+        if self._size == self._capacity:
+            self.clear()

@@ -7,8 +7,7 @@ from hypothesis.strategies import text
 from LZW.codec import decode_file, encode_file, lzw_decode, lzw_encode
 from LZW.utils import is_equal_file
 
-# FIXME: the testing doesn't cover the case that code dict grows beyond capacity.
-MAX_FILE_LEN = 100
+MAX_FILE_LEN = 10000
 
 # VALID_CHARSET = (string.ascii_letters + string.digits + string.punctuation + string.whitespace)
 VALID_CHARSET = [chr(i) for i in range(256)]

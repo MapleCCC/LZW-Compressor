@@ -9,8 +9,7 @@ from hypothesis.strategies import lists, text
 from LZW.__main__ import _compress, _decompress
 from LZW.utils import is_equal_file
 
-# FIXME: the testing doesn't cover the case that code dict grows beyond capacity.
-MAX_FILE_LEN = 100
+MAX_FILE_LEN = 10000
 MAX_FILE_NUM = 3
 
 VALID_CHARSET = [chr(i) for i in range(256)]
