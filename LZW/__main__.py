@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
 
-import os
 from typing import List
 
 import click
 
 from .codec import decode_file, encode_file
+from .extra_itertools import ijoin, isplit
 from .lzwfile import (
     read_lzwfile_codes,
     read_lzwfile_header,
     write_lzwfile_codes,
     write_lzwfile_header,
 )
-from .extra_itertools import isplit, ijoin
 
 # import fire
 # import argparse

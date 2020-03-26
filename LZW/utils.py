@@ -1,4 +1,5 @@
 import random
+
 from .extra_itertools import iequal
 from .iostream import FileInStreamer
 
@@ -14,4 +15,5 @@ def generate_gibberish_file(filename: str, length: int, charset) -> None:
 
 
 def is_equal_file(*filenames, mode: str = "r", **kwargs) -> int:
-    return iequal(FileInStreamer(filename, mode, **kwargs) for filename in filenames)
+    fs_itr = (FileInStreamer(filename, mode, **kwargs) for filename in filenames)
+    return iequal(*fs_itr)

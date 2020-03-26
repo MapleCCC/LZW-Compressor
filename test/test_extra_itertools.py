@@ -1,5 +1,5 @@
 import random
-from itertools import tee, chain
+from itertools import chain, tee
 from typing import *
 
 from hypothesis import given

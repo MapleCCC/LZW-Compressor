@@ -4,6 +4,8 @@ from .code_dict import CodeDict
 from .iostream import FileInStreamer, write_to_file_from_stream
 from .str_dict import StrDict
 
+__all__ = ("encode_file", "decode_file", "lzw_encode", "lzw_decode")
+
 Char = str
 Code = int
 
