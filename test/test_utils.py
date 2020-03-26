@@ -1,5 +1,6 @@
 import os
 import uuid
+import functools
 
 from hypothesis import given
 from hypothesis.strategies import text
@@ -30,3 +31,19 @@ def test_is_equal_file(s: str, t: str, tmp_path) -> None:
     open(file2, "w", encoding="utf-8", newline="").write(t)
 
     assert not is_equal_file(file1, file2, encoding="utf-8", newline="")
+
+
+def test_undecorate():
+
+    def get_two(func):
+        return functools.wraps(func)(lambda: 2)
+
+    def get_one(func):
+        return functools.wraps(func)(lambda: 1)
+
+    @get_two
+    @get_one
+    def raw():
+        return 0
+
+    assert undecorate(raw)() == 0

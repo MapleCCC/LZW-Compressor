@@ -17,18 +17,6 @@ from .lzwfile import (
 # import argparse
 
 
-# TODO: add unit test
-# TODO: consider rewriting in lazy evaluation / generator style, so as to save runtime space cost
-# Another importance of writing in stream style is that so our script can handle input that is infinitely large
-# TODO: handle the corner case of zero file is input for compression
-# TODO: handle the corner case of empty file
-# TODO: why is our encode output different with the example one?
-# TODO: preserve newline format. Disable Python's builtin default universal newline support feature.
-# TODO: ask for clarification of spec: should we handle the case of zero compressed file?
-# TODO: hypothesis custom build strategy
-# TODO: compute test coverage rate
-
-
 CODE_BIT: int = 12
 VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
 

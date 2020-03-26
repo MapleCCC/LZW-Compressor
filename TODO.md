@@ -1,0 +1,19 @@
+- TODO: add max_len restriction to code dict
+- TODO: reserve the last code of code dict as virtual EOF
+- TODO: the testing doesn't cover the case that code dict grows beyond capacity.
+- TODO: implement trie data structure to speedup performance
+- TODO: profile to find performance bottleneck, and try to optimize
+- TODO: add unit test
+- TODO: consider rewriting in lazy evaluation / generator style, so as to save runtime space cost
+- Another importance of writing in stream style is that so our script can handle input that is infinitely large
+- TODO: handle the corner case of zero file is input for compression
+- TODO: handle the corner case of empty file
+- TODO: why is our encode output different with the example one?
+- TODO: preserve newline format. Disable Python's builtin default universal newline support feature.
+- TODO: ask for clarification of spec: should we handle the case of zero compressed file?
+- TODO: hypothesis custom build strategy
+- TODO: compute test coverage rate
+- TODO: implement write_lzw_header for existed lzwfile
+- TODO: use hypothesis' inference from type hinting feature
+- TODO: add test suit for map-interface data structure
+- TODO: use hypothesis' iterables strategy

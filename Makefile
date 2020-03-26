@@ -16,7 +16,11 @@ lint:
 	pylint *.py **/*.py --errors-only
 
 check-unused-import:
-	pylint **/*.py --disable=all --enable=W0611
+	pylint *.py **/*.py --disable=all --enable=W0611
+
+reformat:
+	isort *.py **/*.py
+	black .
 
 clean:
 	rm -f lzw
