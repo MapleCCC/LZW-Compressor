@@ -1,82 +1,47 @@
 import os
-import random
-import subprocess
-from tempfile import TemporaryDirectory
+import shutil
+import uuid
+from typing import *
 
-import pytest
 from hypothesis import given
-from hypothesis.strategies import integers
+from hypothesis.strategies import lists, text
 
-from lzw.codec import lzw_decode, lzw_encode
-from lzw.utils import *
+from LZW.__main__ import _compress, _decompress
+from LZW.utils import is_equal_file
 
-MAX_NUM_TEST_FILES = 10
+# FIXME: the testing doesn't cover the case that code dict grows beyond capacity.
+MAX_FILE_LEN = 100
+MAX_FILE_NUM = 3
 
-EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
-BASELINE_EXE = os.path.join(os.getcwd(), "baseline.py")
-EXPERIMENT_EXE = os.path.join(os.getcwd(), "lzw.exe")
-
-
-def test_regression() -> None:
-    text = read_file_content("Ephesians.txt")
-    assert lzw_decode(lzw_encode(text)) == text
-    text = read_file_content("Matthew.txt")
-    assert lzw_decode(lzw_encode(text)) == text
+VALID_CHARSET = [chr(i) for i in range(256)]
 
 
-# @given(integers(min_value=0, max_value=MAX_FILE_LEN))
-# def test_encode_decode_file(text_len: int) -> None:
-def test_encode_decode_file() -> None:
-    text_len = 0
+@given(
+    l=lists(
+        text(alphabet=VALID_CHARSET, max_size=MAX_FILE_LEN),
+        min_size=1,
+        max_size=MAX_FILE_NUM,
+    )
+)
+def test_integration(l: List[str], tmp_path) -> None:
+    # We need to intentionally create a unique subpath for each function invocation
+    # Because every hypothesis' example of the test function share the same
+    # tmp_path fixture instance, which is undesirable for some test cases.
+    subpath = tmp_path / str(uuid.uuid4())
+    subpath.mkdir()
+    os.chdir(subpath)
 
-    with TemporaryDirectory() as directory:
-        os.chdir(directory)
+    test_files = [f"file{i}" for i in range(len(l))]
+    for test_file, s in zip(test_files, l):
+        with open(test_file, "w", encoding="utf-8", newline="") as f:
+            f.write(s)
 
-        test_files = [
-            f"file{i}" for i in range(random.randrange(1, MAX_NUM_TEST_FILES))
-        ]
-        for test_file in test_files:
-            generate_gibberish_file(test_file, text_len)
+    _compress("a.lzw", test_files)
 
-        subprocess.run(
-            ["python", BASELINE_EXE, "compress", "output_baseline.lzw"] + test_files
-        )
+    for test_file in test_files:
+        shutil.move(test_file, test_file + "old")
 
-        for file in test_files:
-            os.rename(file, file + ".bak")
+    _decompress("a.lzw")
 
-        subprocess.run(["python", BASELINE_EXE, "decompress", "output_baseline.lzw"])
-
-        # print(subprocess.getoutput("ls"))
-
-        # for file in test_files:
-        #     assert diff_file(file, file + ".bak", newline="")
-
-
-# There are different testing strategies. Our easy way is to set the random seed.
-@pytest.mark.skip(reason="Not Yet Implemented")
-@given(integers())
-def test_compression(seed: int) -> None:
-    random.seed(seed)
-
-    with TemporaryDirectory() as directory:
-        os.chdir(directory)
-
-        test_files = [
-            f"file{i}" for i in range(random.randrange(1, MAX_NUM_TEST_FILES))
-        ]
-        for test_file in test_files:
-            generate_gibberish_file(test_file)
-
-        subprocess.run([EXAMPLE_EXE, "-c", "output_example.lzw"] + test_files)
-        # subprocess.run([EXPERIMENT_EXE, "-c", "output.lzw"] + test_files)
-        subprocess.run(
-            ["python", BASELINE_EXE, "compress", "output_baseline.lzw"] + test_files
-        )
-
-        assert diff_file("output_baseline.lzw", "output_example.lzw", is_binary=True)
-
-
-@pytest.mark.skip(reason="Not Yet Implemented")
-def test_decompress():
-    raise NotImplementedError
+    for test_file in test_files:
+        assert is_equal_file(test_file, test_file + "old", encoding="utf-8", newline="")

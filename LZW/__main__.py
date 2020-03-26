@@ -25,6 +25,8 @@ from .lzwfile import (
 # TODO: why is our encode output different with the example one?
 # TODO: preserve newline format. Disable Python's builtin default universal newline support feature.
 # TODO: ask for clarification of spec: should we handle the case of zero compressed file?
+# TODO: hypothesis custom build strategy
+# TODO: compute test coverage rate
 
 
 CODE_BIT: int = 12
@@ -37,9 +39,19 @@ def main():
 
 
 @main.command()
-@click.argument("archive")
+@click.option("-o", "--output", "archive", default="a.lzw")
 @click.argument("files", nargs=-1)
 def compress(archive: str, files: List[str]):
+    _compress(archive, files)
+
+
+@main.command()
+@click.argument("archive")
+def decompress(archive: str):
+    _decompress(archive)
+
+
+def _compress(archive: str, files: List[str]):
     if len(files) == 0:
         raise ValueError("At least one file is needed to be compressed into archive")
     codes = ijoin(
@@ -49,9 +61,7 @@ def compress(archive: str, files: List[str]):
     write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
 
 
-@main.command()
-@click.argument("archive")
-def decompress(archive: str):
+def _decompress(archive: str):
     filenames = read_lzwfile_header(archive)
     codes_list = isplit(read_lzwfile_codes(archive, code_size=CODE_BIT), VIRTUAL_EOF)
     for filename, codes in zip(filenames, codes_list):
