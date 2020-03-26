@@ -134,6 +134,9 @@ def encode_file(filename: str) -> Sequence[int]:
 
 
 def lzw_decode(codes: List[int]) -> str:
+    if len(codes) == 0:
+        return ""
+
     decode_text = ""
 
     str_dict = StrDict(code_bit=CODE_BIT)
