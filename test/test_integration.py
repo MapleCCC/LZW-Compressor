@@ -9,19 +9,19 @@ from hypothesis.strategies import lists, text
 from LZW.__main__ import _compress, _decompress
 from LZW.utils import is_equal_file
 
-MAX_FILE_LEN = 10000
-MAX_FILE_NUM = 3
+MAX_TEST_FILE_LEN = 10000
+MAX_NUM_TEST_FILES = 3
 
 VALID_CHARSET = [chr(i) for i in range(256)]
 
-
-@given(
-    l=lists(
-        text(alphabet=VALID_CHARSET, max_size=MAX_FILE_LEN),
-        min_size=1,
-        max_size=MAX_FILE_NUM,
-    )
+TEST_FILES_BUILD_STRATEGY = lists(
+    text(alphabet=VALID_CHARSET, max_size=MAX_TEST_FILE_LEN),
+    min_size=1,
+    max_size=MAX_NUM_TEST_FILES,
 )
+
+
+@given(l=TEST_FILES_BUILD_STRATEGY)
 def test_integration(l: List[str], tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same

@@ -2,7 +2,7 @@ import os
 import uuid
 from random import sample
 
-from hypothesis import given, settings, example
+from hypothesis import example, given, settings
 from hypothesis.strategies import text
 
 from LZW.codec import decode_file, encode_file, lzw_decode, lzw_encode
@@ -22,7 +22,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = "".join(
 
 @given(s=text(alphabet=VALID_CHARSET, max_size=MAX_FILE_LEN))
 @example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
-@settings(deadline=None)
+# @settings(deadline=None)
 def test_encode_decode(s: str) -> None:
     assert "".join(lzw_decode(lzw_encode(s, CODE_BIT), CODE_BIT)) == s
 

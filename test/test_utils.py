@@ -1,6 +1,6 @@
+import functools
 import os
 import uuid
-import functools
 
 from hypothesis import given
 from hypothesis.strategies import text
@@ -34,7 +34,6 @@ def test_is_equal_file(s: str, t: str, tmp_path) -> None:
 
 
 def test_undecorate():
-
     def get_two(func):
         return functools.wraps(func)(lambda: 2)
 
