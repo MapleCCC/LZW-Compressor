@@ -41,7 +41,8 @@ class StrDict:
         if string in self._storage.values():
             raise ValueError(f'string already in StrDict: "{string}"')
 
-        self._storage[self._size + 256] = string
+        self._storage[self._count + 256] = string
+        self._count += 1
         self._size += 1
 
         if self._size == self._capacity:
