@@ -1,6 +1,7 @@
 import sys
 from typing import ByteString, Iterator
 
+
 # Reference: https://www.python.org/dev/peps/pep-0467/#addition-of-getbyte-method-to-retrieve-a-single-byte
 def getbyte(bs: ByteString, index: int) -> bytes:
     try:

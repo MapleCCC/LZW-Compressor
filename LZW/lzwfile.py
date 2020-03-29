@@ -12,7 +12,7 @@ from typing import *
 from typing import BinaryIO
 
 from .iostream import FileInStreamer
-from .utils import ascii2byte
+from .utils import ascii2byte, byte2ascii
 
 __all__ = (
     "read_lzwfile_header",
@@ -56,15 +56,16 @@ def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
     while line:
         line = readline_from_bytestream(fs)
 
-    if code_size > 32:
-        raise ValueError("code size should not be larger than 32 bits")
+    max_code_size = 32 - 8
+    if code_size > max_code_size:
+        raise ValueError(f"code_size should not be larger than {max_code_size} bits")
 
     buffer = c_ulong(0)
     buffer_load_bitsize = 0
 
     for byte in fs:
         offset = 32 - buffer_load_bitsize - 8
-        buffer = c_ulong(buffer.value | (ord(byte) << offset))
+        buffer = c_ulong(buffer.value | byte2ascii(byte) << offset)
         buffer_load_bitsize += 8
 
         while buffer_load_bitsize >= code_size:
@@ -96,8 +97,10 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
                 buffer = c_ulong(buffer.value << 8)
                 buffer_load_bitsize -= 8
 
-        # TODO: deal with the case that code_size is less than 4
         # padded with 0, and flush out the left bits
+        # because LZW code bit size must be larger than 8-bit
+        # so no need to worry that the padded zeros would be
+        # mistreated as extra code.
         if buffer_load_bitsize > 0:
             ascii_int = buffer.value >> (32 - 8)
             f.write(ascii2byte(ascii_int))
@@ -110,8 +113,8 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
                 _filename = f.readline().strip()
 
             f.truncate()
-            _write_codes(f)
+            _write_codes(f)  # type: ignore
     else:
         with open(lzwfile, "wb") as f:
             f.write(b"\n")
-            _write_codes(f)
+            _write_codes(f)  # type: ignore

@@ -14,6 +14,10 @@
 - Write README
 - Clean up code. Remove dead code. Polish comments. Add elaborate docstring.
 - Test upon different code_bitsize
+- Add __all__ to modules
+- Add __slots__ to classes
+- Add license
+- Add docstring for all significant functions
 
 # Done
 

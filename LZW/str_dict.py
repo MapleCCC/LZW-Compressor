@@ -5,6 +5,9 @@ from .utils import ascii2byte
 
 class StrDict:
     def __init__(self, code_bit: int) -> None:
+        if code_bit <= 8:
+            raise ValueError("Code bit size should larger than 8")
+
         self._storage: Dict[int, bytes] = {}
         # The first 256 codes are reserved for ASCII characters
         # The last code is reserved for virtual EOF
