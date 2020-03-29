@@ -6,25 +6,21 @@ from hypothesis import example, given, settings
 from hypothesis.strategies import binary
 
 from LZW.codec import decode_file, encode_file, lzw_decode, lzw_encode
-from LZW.utils import is_equal_file
 from LZW.pep467 import iterbytes
+from LZW.utils import ascii2byte, is_equal_file
 
 MAX_FILE_LEN = 10000
 CODE_BIT = 12
 
-# FIXME: hypothesis' binary strategy seems to only able to produce digits
+VALID_CHARSET = [ascii2byte(i) for i in range(256)]
 
-# VALID_CHARSET = (string.ascii_letters + string.digits + string.punctuation + string.whitespace)
-VALID_CHARSET = [str(i).encode("ascii") for i in range(256)]
-
-# FIXME
 EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
     b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20)
 )
 
 
 @given(s=binary(max_size=MAX_FILE_LEN))
-# @example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
+@example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
 # @settings(deadline=None)
 def test_encode_decode(s: bytes) -> None:
     assert b"".join(lzw_decode(lzw_encode(iterbytes(s), CODE_BIT), CODE_BIT)) == s

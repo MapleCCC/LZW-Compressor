@@ -12,6 +12,7 @@ from typing import *
 from typing import BinaryIO
 
 from .iostream import FileInStreamer
+from .utils import ascii2byte
 
 __all__ = (
     "read_lzwfile_header",
@@ -101,16 +102,16 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
             buffer_load_bitsize += code_size
 
             while buffer_load_bitsize >= 8:
-                byte = buffer.value >> (32 - 8)
-                f.write(str(byte).encode("ascii"))
+                ascii_int = buffer.value >> (32 - 8)
+                f.write(ascii2byte(ascii_int))
                 buffer = c_ulong(buffer.value << 8)
                 buffer_load_bitsize -= 8
 
         # TODO: deal with the case that code_size is less than 4
         # padded with 0, and flush out the left bits
         if buffer_load_bitsize > 0:
-            byte = buffer.value >> (32 - 8)
-            f.write(str(byte).encode("ascii"))
+            ascii_int = buffer.value >> (32 - 8)
+            f.write(ascii2byte(ascii_int))
 
     if os.path.isfile(lzwfile):
         with open(lzwfile, "rb+") as f:

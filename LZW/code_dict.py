@@ -1,5 +1,6 @@
-import sys
 from typing import Dict
+
+from .utils import ascii2byte
 
 # TODO: use trie as code dict internal data structure
 
@@ -18,7 +19,7 @@ class CodeDict:
         self._count = 0
 
         for i in range(256):
-            self._storage[i.to_bytes(1, sys.byteorder)] = i
+            self._storage[ascii2byte(i)] = i
 
     # Test if adding __slots__ actually accelerate or excerbate performance
     __slots__ = ("_storage", "_capacity", "_size", "_count")
@@ -28,8 +29,7 @@ class CodeDict:
         self._size = 0
 
         for i in range(256):
-            # self._storage[str(i).encode("ascii")] = i
-            self._storage[i.to_bytes(1, sys.byteorder)] = i
+            self._storage[ascii2byte(i)] = i
 
     def __contains__(self, item: bytes) -> bool:
         """ Check string membership """

@@ -1,3 +1,4 @@
+import sys
 from typing import *
 
 from .extra_itertools import iequal
@@ -17,3 +18,9 @@ def undecorate(func: Callable) -> Callable:
         except AttributeError:
             break
     return ret
+
+
+def ascii2byte(x: int) -> bytes:
+    if not 0 <= x <= 255:
+        raise ValueError
+    return x.to_bytes(1, sys.byteorder)

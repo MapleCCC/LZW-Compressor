@@ -1,5 +1,6 @@
-import sys
 from typing import Dict
+
+from .utils import ascii2byte
 
 
 class StrDict:
@@ -12,8 +13,7 @@ class StrDict:
         self._count = 0
 
         for i in range(256):
-            # self._storage[i] = str(i).encode("ascii")
-            self._storage[i] = (i).to_bytes(1, sys.byteorder)
+            self._storage[i] = ascii2byte(i)
 
     __slots__ = ("_storage", "_capacity", "_size", "_count")
 
@@ -22,8 +22,7 @@ class StrDict:
         self._size = 0
 
         for i in range(256):
-            # self._storage[i] = str(i).encode("ascii")
-            self._storage[i] = (i).to_bytes(1, sys.byteorder)
+            self._storage[i] = ascii2byte(i)
 
     def __contains__(self, item: int) -> bool:
         # """ A versatile membership testing routine """
