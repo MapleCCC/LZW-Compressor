@@ -30,11 +30,10 @@ def read_lzwfile_header(lzwfile: str) -> Iterable[str]:
     with open(lzwfile, "rb") as f:
         entry = f.readline().strip()
         while entry != b"":
-            yield entry.decode("ascii")
+            yield entry.decode()
             entry = f.readline().strip()
 
 
-# TODO: support unicode header
 def write_lzwfile_header(lzwfile: str, header: Header) -> None:
     if os.path.isfile(lzwfile):
         # TODO: how to implement?
@@ -42,8 +41,7 @@ def write_lzwfile_header(lzwfile: str, header: Header) -> None:
     else:
         with open(lzwfile, "wb") as f:
             for entry in header:
-                # entry in Header must be ASCII-compatible
-                f.write(entry.encode("ascii") + b"\n")
+                f.write(entry.encode() + b"\n")
             f.write(b"\n")
 
 
