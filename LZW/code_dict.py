@@ -1,3 +1,4 @@
+import sys
 from typing import Dict
 
 # TODO: use trie as code dict internal data structure
@@ -9,7 +10,7 @@ from typing import Dict
 # interface.
 class CodeDict:
     def __init__(self, code_bit: int) -> None:
-        self._storage: Dict[str, int] = dict()
+        self._storage: Dict[bytes, int] = dict()
         # The first 256 codes are reserved for ASCII characters
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bit - 256 - 1
@@ -17,7 +18,7 @@ class CodeDict:
         self._count = 0
 
         for i in range(256):
-            self._storage[chr(i)] = i
+            self._storage[i.to_bytes(1, sys.byteorder)] = i
 
     # Test if adding __slots__ actually accelerate or excerbate performance
     __slots__ = ("_storage", "_capacity", "_size", "_count")
@@ -27,19 +28,20 @@ class CodeDict:
         self._size = 0
 
         for i in range(256):
-            self._storage[chr(i)] = i
+            # self._storage[str(i).encode("ascii")] = i
+            self._storage[i.to_bytes(1, sys.byteorder)] = i
 
-    def __contains__(self, item: str) -> bool:
+    def __contains__(self, item: bytes) -> bool:
         """ Check string membership """
         return item in self._storage
 
-    def __getitem__(self, key: str) -> int:
+    def __getitem__(self, key: bytes) -> int:
         try:
             return self._storage[key]
         except:
             raise KeyError(f'code is missing for string: "{key}"')
 
-    def add_new_code(self, item: str) -> None:
+    def add_new_code(self, item: bytes) -> None:
         if self.__contains__(item):
             raise ValueError(f"{item} already in code dict")
 
