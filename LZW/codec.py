@@ -12,12 +12,12 @@ Char = bytes
 Code = int
 
 
-def encode_file(filename: str, code_size: int) -> Iterable[int]:
+def encode_file(filename: AnyStr, code_size: int) -> Iterable[int]:
     fs = FileInStreamer(filename, mode="rb")
     return lzw_encode(fs, code_size)
 
 
-def decode_file(filename: str, codes: Iterable[Code], code_size: int) -> None:
+def decode_file(filename: AnyStr, codes: Iterable[Code], code_size: int) -> None:
     write_to_file_from_stream(lzw_decode(codes, code_size), filename, mode="wb")
 
 

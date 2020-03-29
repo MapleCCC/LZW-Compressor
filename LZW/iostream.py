@@ -4,7 +4,7 @@ from typing import AnyStr, Iterable, Iterator
 class FileInStreamer:
     """ A simple and thin stream wrapper of file content, read in one byte at a time """
 
-    def __init__(self, filename: str, mode: str = "r", **kwargs) -> None:
+    def __init__(self, filename: AnyStr, mode: str = "r", **kwargs) -> None:
         # self._context_manager = open(filename, mode, **kwargs)
         # self._fp = self._context_manager.__enter__()
         self._fp = open(filename, mode, **kwargs)
@@ -27,7 +27,7 @@ class FileInStreamer:
 
 
 def write_to_file_from_stream(
-    sstream: Iterable[AnyStr], filename: str, mode: str = "w", **kwargs
+    sstream: Iterable[AnyStr], filename: AnyStr, mode: str = "w", **kwargs
 ) -> None:
     with open(filename, mode, **kwargs) as f:
         for s in sstream:

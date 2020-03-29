@@ -25,20 +25,16 @@ Entry = str
 Header = Iterable[Entry]
 Code = int
 
-extended_ascii_encoding = "utf-8"
-
 
 def read_lzwfile_header(lzwfile: str) -> Iterable[str]:
-    # From doc, note following behavior,
-    # BinaryIO.readline() treat b"\n" as terminate
-    # bytes.strip() treat ASCII whitespace characters (including b"\r", b"\n") as to be removed
     with open(lzwfile, "rb") as f:
         entry = f.readline().strip()
         while entry != b"":
-            yield entry.decode(extended_ascii_encoding)
+            yield entry.decode("ascii")
             entry = f.readline().strip()
 
 
+# TODO: support unicode header
 def write_lzwfile_header(lzwfile: str, header: Header) -> None:
     if os.path.isfile(lzwfile):
         # TODO: how to implement?
@@ -46,26 +42,21 @@ def write_lzwfile_header(lzwfile: str, header: Header) -> None:
     else:
         with open(lzwfile, "wb") as f:
             for entry in header:
-                f.write((entry + os.linesep).encode(extended_ascii_encoding))
-            f.write(os.linesep.encode(extended_ascii_encoding))
+                # entry in Header must be ASCII-compatible
+                f.write(entry.encode("ascii") + b"\n")
+            f.write(b"\n")
 
 
 def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
     def readline_from_bytestream(fs: FileInStreamer) -> bytes:
-        # ret = b""
-        # for byte in fs:
-        #     ret += byte
-        #     if byte == b"\n":
-        #         break
-        # return ret
         return b"".join(takewhile(lambda byte: byte != b"\n", fs))
 
     fs = FileInStreamer(lzwfile, "rb")
 
     # Skip through the header
-    line = readline_from_bytestream(fs).strip()
+    line = readline_from_bytestream(fs)
     while line:
-        line = readline_from_bytestream(fs).strip()
+        line = readline_from_bytestream(fs)
 
     if code_size > 32:
         raise ValueError("code size should not be larger than 32 bits")
@@ -124,5 +115,5 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
             _write_codes(f)
     else:
         with open(lzwfile, "wb") as f:
-            f.write(os.linesep.encode(extended_ascii_encoding))
+            f.write(b"\n")
             _write_codes(f)
