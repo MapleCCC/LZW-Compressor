@@ -1,5 +1,30 @@
-from itertools import groupby, zip_longest
+from itertools import groupby, islice, zip_longest
 from typing import *
+
+__all__ = [
+    "iindex",
+    "remove_tail",
+    "ijoin",
+    "all_equal",
+    "iequal",
+    "iter_noexcept",
+    "isplit",
+    "takeuntil",
+]
+
+
+# TODO: add support for negative value of start argument
+def iindex(
+    iterable: Iterable, target, start: int = 0, stop: int = None
+) -> Optional[int]:
+    # if start < 0 or stop < 0:
+    #     raise NotImplementedError
+
+    l = islice(iterable, start, stop)
+    for i, elem in enumerate(l):
+        if elem == target:
+            return i + start
+    return None
 
 
 class EmptyTailError(Exception):

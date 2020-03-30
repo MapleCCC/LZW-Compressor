@@ -4,15 +4,14 @@ provides simple tools to retrieve and process LZW files.
 """
 
 import os
-from ctypes import c_ulong
 from itertools import takewhile
 from typing import *
 
 # non-wildcard import, because BinaryIO is not part of public API
 from typing import BinaryIO
 
+from .bitarray import Bitarray
 from .iostream import FileInStreamer
-from .utils import ascii2byte, byte2ascii
 
 __all__ = (
     "read_lzwfile_header",
@@ -56,54 +55,41 @@ def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
     while line:
         line = readline_from_bytestream(fs)
 
-    max_code_size = 32 - 8
-    if code_size > max_code_size:
-        raise ValueError(f"code_size should not be larger than {max_code_size} bits")
-
-    buffer = c_ulong(0)
-    buffer_load_bitsize = 0
+    buffer = Bitarray()
 
     for byte in fs:
-        offset = 32 - buffer_load_bitsize - 8
-        buffer = c_ulong(buffer.value | byte2ascii(byte) << offset)
-        buffer_load_bitsize += 8
+        print(f"read in byte: {byte}")
+        buffer.push_bytes_back(byte)
 
-        while buffer_load_bitsize >= code_size:
-            code = buffer.value >> (32 - code_size)
-            buffer = c_ulong(buffer.value << code_size)
-            buffer_load_bitsize -= code_size
+        print(f"Length of bitarray: {len(buffer)}")
+
+        while len(buffer) >= code_size:
+            code = buffer[:code_size].to_int()
+            buffer = buffer[code_size:]
+            print(f"yield one code: {code}")
             yield code
 
 
 def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
     def _write_codes(f: BinaryIO):
-        buffer_load_bitsize = 0
-        buffer = c_ulong(0)
-
-        max_code_size = 32 - 8
-        if code_size > max_code_size:
-            raise ValueError(
-                f"code_size should not be larger than {max_code_size} bits"
-            )
+        buffer = Bitarray()
 
         for code in codes:
-            offset = 32 - code_size - buffer_load_bitsize
-            buffer = c_ulong(buffer.value | (code << offset))
-            buffer_load_bitsize += code_size
+            buffer += Bitarray.from_int(code, code_size)
 
-            while buffer_load_bitsize >= 8:
-                ascii_int = buffer.value >> (32 - 8)
-                f.write(ascii2byte(ascii_int))
-                buffer = c_ulong(buffer.value << 8)
-                buffer_load_bitsize -= 8
+            while len(buffer) >= 8:
+                byte = buffer.pop_byte_front()
+                print(f"Write out byte: {byte}")
+                f.write(byte)
 
         # padded with 0, and flush out the left bits
         # because LZW code bit size must be larger than 8-bit
         # so no need to worry that the padded zeros would be
         # mistreated as extra code.
-        if buffer_load_bitsize > 0:
-            ascii_int = buffer.value >> (32 - 8)
-            f.write(ascii2byte(ascii_int))
+        if len(buffer) > 0:
+            buffer.push_bytes_back(b"\x00")
+            byte = buffer.pop_byte_front()
+            f.write(byte)
 
     if os.path.isfile(lzwfile):
         with open(lzwfile, "rb+") as f:
