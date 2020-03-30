@@ -58,15 +58,11 @@ def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
     buffer = Bitarray()
 
     for byte in fs:
-        print(f"read in byte: {byte}")
         buffer.push_bytes_back(byte)
-
-        print(f"Length of bitarray: {len(buffer)}")
 
         while len(buffer) >= code_size:
             code = buffer[:code_size].to_int()
             buffer = buffer[code_size:]
-            print(f"yield one code: {code}")
             yield code
 
 
@@ -79,7 +75,6 @@ def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
 
             while len(buffer) >= 8:
                 byte = buffer.pop_byte_front()
-                print(f"Write out byte: {byte}")
                 f.write(byte)
 
         # padded with 0, and flush out the left bits

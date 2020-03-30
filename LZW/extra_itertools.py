@@ -15,7 +15,7 @@ __all__ = [
 
 # TODO: add support for negative value of start argument
 def iindex(
-    iterable: Iterable, target, start: int = 0, stop: int = None
+    iterable: Iterable, target, start: int = None, stop: int = None
 ) -> Optional[int]:
     # if start < 0 or stop < 0:
     #     raise NotImplementedError
@@ -23,7 +23,7 @@ def iindex(
     l = islice(iterable, start, stop)
     for i, elem in enumerate(l):
         if elem == target:
-            return i + start
+            return i + start if start else i
     return None
 
 
