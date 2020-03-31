@@ -66,6 +66,9 @@ class Bitarray:
         return self
 
     def to_int(self) -> int:
+        if not self._storage:
+            raise IndexError("can't convert empty bitarray to int")
+
         # Small optimization trick
         most_significant_bit_index = iindex(self._storage, 1)
         return reduce(
