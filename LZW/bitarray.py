@@ -68,8 +68,6 @@ class Bitarray:
     def to_int(self) -> int:
         # Small optimization trick
         most_significant_bit_index = iindex(self._storage, 1)
-        if most_significant_bit_index is None:
-            return 0
         return reduce(
             lambda x, y: 2 * x + y, self._storage[most_significant_bit_index:], 0
         )

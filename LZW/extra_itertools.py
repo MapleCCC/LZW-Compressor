@@ -1,8 +1,9 @@
-from itertools import groupby, islice, zip_longest
+from itertools import groupby, zip_longest, takewhile
 from typing import *
 
 __all__ = [
     "iindex",
+    "ilen",
     "remove_tail",
     "ijoin",
     "all_equal",
@@ -13,18 +14,15 @@ __all__ = [
 ]
 
 
-# TODO: add support for negative value of start argument
-def iindex(
-    iterable: Iterable, target, start: int = None, stop: int = None
-) -> Optional[int]:
-    # if start < 0 or stop < 0:
-    #     raise NotImplementedError
+def iindex(iterable: Iterable, target) -> int:
+    return ilen(takewhile(lambda x: x != target, iterable))
 
-    l = islice(iterable, start, stop)
-    for i, elem in enumerate(l):
-        if elem == target:
-            return i + start if start else i
-    return None
+
+def ilen(iterable: Iterable) -> int:
+    count = 0
+    for _ in iterable:
+        count += 1
+    return count
 
 
 class EmptyTailError(Exception):
