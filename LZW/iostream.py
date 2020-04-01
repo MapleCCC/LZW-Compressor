@@ -16,14 +16,11 @@ class FileInStreamer:
         if byte:
             return byte
         else:
+            self._fp.close()
             raise StopIteration
 
     def __iter__(self) -> Iterator:
         return self
-
-    def __del__(self) -> None:
-        # self._context_manager.__exit__(None, None, None)
-        self._fp.close()
 
 
 def write_to_file_from_stream(
