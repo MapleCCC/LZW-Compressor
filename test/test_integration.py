@@ -4,7 +4,7 @@ import uuid
 from typing import *
 
 from hypothesis import given
-from hypothesis.strategies import lists, text
+from hypothesis.strategies import lists, binary
 
 from LZW.__main__ import _compress, _decompress
 from LZW.utils import is_equal_file
@@ -12,17 +12,14 @@ from LZW.utils import is_equal_file
 MAX_TEST_FILE_LEN = 10000
 MAX_NUM_TEST_FILES = 3
 
-VALID_CHARSET = [chr(i) for i in range(256)]
 
 TEST_FILES_BUILD_STRATEGY = lists(
-    text(alphabet=VALID_CHARSET, max_size=MAX_TEST_FILE_LEN),
-    min_size=1,
-    max_size=MAX_NUM_TEST_FILES,
+    binary(max_size=MAX_TEST_FILE_LEN), min_size=1, max_size=MAX_NUM_TEST_FILES,
 )
 
 
 @given(l=TEST_FILES_BUILD_STRATEGY)
-def test_integration(l: List[str], tmp_path) -> None:
+def test_integration(l: List[ByteString], tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -32,7 +29,7 @@ def test_integration(l: List[str], tmp_path) -> None:
 
     test_files = [f"file{i}" for i in range(len(l))]
     for test_file, s in zip(test_files, l):
-        with open(test_file, "w", encoding="utf-8", newline="") as f:
+        with open(test_file, "wb") as f:
             f.write(s)
 
     _compress("a.lzw", test_files)
@@ -43,4 +40,4 @@ def test_integration(l: List[str], tmp_path) -> None:
     _decompress("a.lzw")
 
     for test_file in test_files:
-        assert is_equal_file(test_file, test_file + "old", encoding="utf-8", newline="")
+        assert is_equal_file(test_file, test_file + "old", mode="rb")
