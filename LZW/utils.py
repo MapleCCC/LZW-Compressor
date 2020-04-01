@@ -27,6 +27,6 @@ def ascii2byte(x: int) -> bytes:
 
 
 def byte2ascii(b: ByteString) -> int:
-    if len(b) > 1:
+    if len(b) != 1:
         raise ValueError
     return int.from_bytes(b, sys.byteorder)

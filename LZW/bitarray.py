@@ -59,13 +59,19 @@ class Bitarray:
         return bits2int(self._storage)
 
     @classmethod
-    def from_int(cls, x: int) -> "Bitarray":
+    def from_int(cls, x: int, bit_size: int = None) -> "Bitarray":
         """
         Boundary Conditions:
         0 yields empty bitarray
         negative integers yield exception
         """
-        return cls(int2bits(x))
+        _bits = int2bits(x)
+        if bit_size:
+            if bit_size < len(_bits):
+                raise OverflowError
+        else:
+            bit_size = len(_bits)
+        return cls([0] * (bit_size - len(_bits)) + _bits)
 
     def extend(self, iterable: Iterable[Bit]) -> None:
         self._storage.extend(iterable)
