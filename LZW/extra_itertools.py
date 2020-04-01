@@ -1,4 +1,4 @@
-from itertools import groupby, zip_longest, takewhile
+from itertools import groupby, takewhile, zip_longest
 from typing import *
 
 __all__ = [
@@ -12,6 +12,14 @@ __all__ = [
     "isplit",
     "takeuntil",
 ]
+
+
+# grouper function code snippet comes from https://docs.python.org/3.8/library/itertools.html#itertools-recipes
+def grouper(iterable, n, fillvalue=None):
+    "Collect data into fixed-length chunks or blocks"
+    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
+    args = [iter(iterable)] * n
+    return zip_longest(*args, fillvalue=fillvalue)
 
 
 def iindex(iterable: Iterable, target) -> int:
@@ -33,7 +41,7 @@ class NotReachedTailError(Exception):
     pass
 
 
-# class disguised as function
+# class disguised as function/callable
 class remove_tail:
     """
     Store tail in iterator object's attribute named "tail", for later refernce.
@@ -100,8 +108,9 @@ def ijoin(separator: Iterable, iterables: Iterable[Iterable]) -> Iterable:
         yield from new_iterator.tail
 
 
-# The all_equal function comes from more-itertools library
+# all_equal function code snippet comes from https://docs.python.org/3.8/library/itertools.html#itertools-recipes
 def all_equal(iterable: Iterable) -> bool:
+    "Returns True if all the elements are equal to each other"
     g = groupby(iterable)
     return next(g, True) and not next(g, False)  # type: ignore
 
