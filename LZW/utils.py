@@ -23,10 +23,10 @@ def undecorate(func: Callable) -> Callable:
 def ascii2byte(x: int) -> bytes:
     if not 0 <= x <= 255:
         raise ValueError
-    return x.to_bytes(1, sys.byteorder)
+    return x.to_bytes(1, "big")
 
 
 def byte2ascii(b: ByteString) -> int:
     if len(b) != 1:
         raise ValueError
-    return int.from_bytes(b, sys.byteorder)
+    return int.from_bytes(b, "big")
