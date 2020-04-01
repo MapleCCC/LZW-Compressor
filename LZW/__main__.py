@@ -4,7 +4,7 @@ from typing import List
 
 import click
 
-from .codec import decode_file, encode_file
+from .codec import LZWEncoder, LZWDecoder
 from .extra_itertools import ijoin, isplit
 from .lzwfile import (
     read_lzwfile_codes,
@@ -42,8 +42,9 @@ def decompress(archive: str):
 def _compress(archive: str, files: List[str]):
     if len(files) == 0:
         raise ValueError("At least one file is needed to be compressed into archive")
+    encoder = LZWEncoder(code_size=CODE_BIT)
     codes = ijoin(
-        [VIRTUAL_EOF], (encode_file(file, code_size=CODE_BIT) for file in files)
+        [VIRTUAL_EOF], (encoder.encode_file(file) for file in files)
     )
     write_lzwfile_header(archive, files)
     write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
@@ -52,8 +53,9 @@ def _compress(archive: str, files: List[str]):
 def _decompress(archive: str):
     filenames = read_lzwfile_header(archive)
     codes_list = isplit(read_lzwfile_codes(archive, code_size=CODE_BIT), VIRTUAL_EOF)
+    decoder = LZWDecoder(code_size=CODE_BIT)
     for filename, codes in zip(filenames, codes_list):
-        decode_file(filename, codes, code_size=CODE_BIT)
+        decoder.decode_file(filename, codes)
 
 
 if __name__ == "__main__":
