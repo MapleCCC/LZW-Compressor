@@ -5,7 +5,7 @@ from random import sample
 from hypothesis import example, given, settings
 from hypothesis.strategies import binary
 
-from LZW.codec import decode_file, encode_file, lzw_decode, lzw_encode
+from LZW.codec import LZWEncoder, LZWDecoder
 from LZW.pep467 import iterbytes
 from LZW.utils import ascii2byte, is_equal_file
 
@@ -23,7 +23,9 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 @example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
 # @settings(deadline=None)
 def test_encode_decode(s: bytes) -> None:
-    assert b"".join(lzw_decode(lzw_encode(iterbytes(s), CODE_BIT), CODE_BIT)) == s
+    encoder = LZWEncoder(CODE_BIT)
+    decoder = LZWDecoder(CODE_BIT)
+    assert b"".join(decoder._decode(encoder._encode(iterbytes(s)))) == s
 
 
 @given(s=binary(max_size=MAX_FILE_LEN))
@@ -41,6 +43,8 @@ def test_encode_decode_file(s: bytes, tmp_path) -> None:
     with open(original_filename, "wb") as f:
         f.write(s)
 
-    codes = encode_file(original_filename, code_size=CODE_BIT)
-    decode_file(decoded_filename, codes, code_size=CODE_BIT)
+    encoder = LZWEncoder(code_size=CODE_BIT)
+    decoder = LZWDecoder(code_size=CODE_BIT)
+    codes = encoder.encode_file(original_filename)
+    decoder.decode_file(decoded_filename, codes)
     assert is_equal_file(original_filename, decoded_filename, mode="rb")
