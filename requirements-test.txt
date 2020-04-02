@@ -1,2 +1,6 @@
 pytest==5.4.1
 hypothesis==5.8.0
+# Surprisingly, pip install hypothesis==5.8.0 get warning:
+# "hypothesis 5.8.0 has requirement attrs>=19.2.0, but you'll have attrs 18.2.0 which is incompatible."
+# "ERROR: hypothesis 5.8.0 has requirement attrs>=19.2.0, but you'll have attrs 19.1.0 which is incompatible."
+attrs==19.3.0
