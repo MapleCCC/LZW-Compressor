@@ -2,8 +2,9 @@ import math
 from functools import reduce
 from typing import *
 
+from more_itertools import grouper
+
 from .bit import Bit
-from .extra_itertools import grouper
 from .pep467 import iterbytes
 from .utils import ascii2byte, byte2ascii
 
