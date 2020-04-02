@@ -21,7 +21,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 
 @given(s=binary(max_size=MAX_FILE_LEN))
 @example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
-# @settings(deadline=None)
+@settings(deadline=None)
 def test_encode_decode(s: bytes) -> None:
     encoder = LZWEncoder(CODE_BIT)
     decoder = LZWDecoder(CODE_BIT)
