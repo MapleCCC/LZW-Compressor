@@ -16,6 +16,8 @@ class LZWEncoder:
     def __init__(self, code_size: int) -> None:
         self._code_dict = CodeDict(code_size)
 
+    __slots__ = ["_code_dict"]
+
     def encode_file(self, filename: AnyStr) -> Iterable[int]:
         fs = FileInStreamer(filename, mode="rb")
         return self._encode(fs)
@@ -42,6 +44,8 @@ class LZWEncoder:
 class LZWDecoder:
     def __init__(self, code_size: int) -> None:
         self._str_dict: StrDict = StrDict(code_size)
+
+    __slots__ = ["_str_dict"]
 
     def decode_file(self, filename: AnyStr, codes: Iterable[Code]) -> None:
         write_to_file_from_stream(self._decode(codes), filename, mode="wb")

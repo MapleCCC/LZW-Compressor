@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
+from itertools import chain
 from typing import List
 
 import click
 
-from .codec import LZWEncoder, LZWDecoder
+from .codec import LZWDecoder, LZWEncoder
 from .extra_itertools import ijoin, isplit
 from .lzwfile import (
     read_lzwfile_codes,

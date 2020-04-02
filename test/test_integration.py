@@ -4,7 +4,7 @@ import uuid
 from typing import *
 
 from hypothesis import given
-from hypothesis.strategies import lists, binary
+from hypothesis.strategies import binary, lists
 
 from LZW.__main__ import _compress, _decompress
 from LZW.utils import is_equal_file

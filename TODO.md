@@ -20,6 +20,8 @@
 - Add license
 - Add docstring for all significant functions
 - Add docstring to module level
+- Add GitHub README badge (CI passing unit testing cases, testing coverage rate, etc.)
+- Add CI. Travis, Codecov.
 
 # Done
 

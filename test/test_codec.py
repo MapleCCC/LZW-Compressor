@@ -5,13 +5,14 @@ from random import sample
 from hypothesis import example, given, settings
 from hypothesis.strategies import binary
 
-from LZW.codec import LZWEncoder, LZWDecoder
+from LZW.codec import LZWDecoder, LZWEncoder
 from LZW.pep467 import iterbytes
 from LZW.utils import ascii2byte, is_equal_file
 
 MAX_FILE_LEN = 10000
 CODE_BIT = 12
 
+# All possible one-length bytes
 VALID_CHARSET = [ascii2byte(i) for i in range(256)]
 
 EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(

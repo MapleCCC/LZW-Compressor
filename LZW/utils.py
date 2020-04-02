@@ -1,4 +1,3 @@
-import sys
 from typing import *
 
 from .extra_itertools import iequal
