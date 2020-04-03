@@ -1,24 +1,31 @@
 # LZW Compressor
 
 [![License](https://img.shields.io/github/license/MapleCCC/LZW-Compressor?color=00BFFF)](http://www.wtfpl.net/)
-[![Build Status](https://img.shields.io/travis/MapleCCC/LZW-Compressor.svg)](https://travis-ci.com/MapleCCC/LZW-Compressor)
+[![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.com/MapleCCC/LZW-Compressor)
 <!-- [![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.org/MapleCCC/LZW-Compressor) -->
 
 ## Introduction
 
-LZW is an archive format that utilize power of LZW compression algorithm. LZW compression algorithm is a dictionary-based loseless algorithm. It's a old algorithm suitable for beginner to practice.
+LZW is an archive format that utilize power of LZW compression algorithm. [LZW compression algorithm](https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch) is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
 
 ## Installation
 
-Prerequisites: Git, pip.
+Prerequisites: Python>=3.6, [Git](https://git-scm.com/), [pip](https://pip.pypa.io/en/stable/).
 
 ```bash
 $ git clone https://github.com/MapleCCC/LZW-Compressor.git
 
 $ cd LZW-Compressor
 
+# You can optionally create a virtual environment for isolation purpose
+$ python -m virtualenv .venv
+$ source .venv/Scripts/activate
+
+# Install requirements
+$ python -m pip install -r requirements.txt
+
 # Install in editable mode
-$ pip install -e .  # Note the dot
+$ python -m pip install -e .  # Mind the dot at the end
 ```
 
 ## Usage
@@ -29,6 +36,18 @@ $ lzw compress [-o|--output <ARCHIVE>] <FILES>...
 
 # Decompression
 $ lzw decompress <ARCHIVE>
+```
+
+## Test
+
+The project uses pytest and hypothesis as test framework. Property-based testing is adopted for flexibility and conciseness.
+
+```bash
+# Install test requirements
+$ python -m pip install -r requirements-test.txt
+
+# Base test
+$ make test
 ```
 
 ## License

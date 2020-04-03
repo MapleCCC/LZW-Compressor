@@ -7,10 +7,10 @@ setuptools.setup(
     name="LZW-Compressor",
     author="MapleCCC",
     author_email="littlelittlemaple@gmail.com",
-    description="A compression and decompression program for LZW standard",
+    description="A compression and decompression program for LZW archive format",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    # url="https://github.com/MapleCCC/Session-Buddy-Helpkit",
+    url="https://github.com/MapleCCC/LZW-Compressor",
     packages=setuptools.find_packages(),
     license="WTFPL 2.0",
     classifiers=[
