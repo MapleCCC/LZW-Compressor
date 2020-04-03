@@ -16,6 +16,9 @@ lint:
 check-unused-imports:
 	pylint *.py **/*.py --disable=all --enable=W0611
 
+# Set alias for easy typing
+cui: check-unused-imports
+
 reformat:
 	isort *.py **/*.py
 	black .
