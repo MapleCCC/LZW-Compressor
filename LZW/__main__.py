@@ -44,8 +44,10 @@ def _compress(archive: str, files: List[str]):
     if len(files) == 0:
         raise ValueError("At least one file is needed to be compressed into archive")
     encoder = LZWEncoder(code_size=CODE_BIT)
-    codes = ijoin(
-        [VIRTUAL_EOF], (encoder.encode_file(file) for file in files)
+    # TODO: Use more concise itertools, like more_itertools.interleave
+    codes = chain(
+        ijoin([VIRTUAL_EOF], (encoder.encode_file(file) for file in files)),
+        [VIRTUAL_EOF],
     )
     write_lzwfile_header(archive, files)
     write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
