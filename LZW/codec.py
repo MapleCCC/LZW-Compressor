@@ -1,6 +1,7 @@
 from typing import *
 
 from .code_dict import CodeDict
+from .extra_itertools import iappend
 from .iostream import FileInStreamer, write_to_file_from_stream
 from .pep467 import getbyte
 from .str_dict import StrDict
@@ -15,12 +16,13 @@ Code = int
 class LZWEncoder:
     def __init__(self, code_size: int) -> None:
         self._code_dict = CodeDict(code_size)
+        self._virtual_eof = 2 ** code_size - 1
 
-    __slots__ = ["_code_dict"]
+    __slots__ = ["_code_dict", "_virtual_eof"]
 
     def encode_file(self, filename: AnyStr) -> Iterable[int]:
         fs = FileInStreamer(filename, mode="rb")
-        return self._encode(fs)
+        return iappend(self._encode(fs), self._virtual_eof)
 
     def _encode(self, text: Iterable[Char]) -> Iterator[Code]:
         # The frequent operation is to find the longest prefix
@@ -44,8 +46,9 @@ class LZWEncoder:
 class LZWDecoder:
     def __init__(self, code_size: int) -> None:
         self._str_dict: StrDict = StrDict(code_size)
+        self._virtual_eof = 2 ** code_size - 1
 
-    __slots__ = ["_str_dict"]
+    __slots__ = ["_str_dict", "_virtual_eof"]
 
     def decode_file(self, filename: AnyStr, codes: Iterable[Code]) -> None:
         write_to_file_from_stream(self._decode(codes), filename, mode="wb")
@@ -53,6 +56,8 @@ class LZWDecoder:
     def _decode(self, codes: Iterable[Code]) -> Iterator[Char]:
         P = b""
         for code in codes:
+            if code == self._virtual_eof:
+                break
             if code in self._str_dict:
                 if P:
                     self._str_dict.add_new_str(P + getbyte(self._str_dict[code], 0))

@@ -4,10 +4,9 @@ from itertools import chain
 from typing import List
 
 import click
-from more_itertools import split_at
+from more_itertools import split_after
 
 from .codec import LZWDecoder, LZWEncoder
-from .extra_itertools import ijoin
 from .lzwfile import (
     read_lzwfile_codes,
     read_lzwfile_header,
@@ -19,8 +18,8 @@ from .lzwfile import (
 # import argparse
 
 
-CODE_BIT: int = 12
-VIRTUAL_EOF: int = 2 ** CODE_BIT - 1
+CODE_BITSIZE: int = 12
+VIRTUAL_EOF: int = 2 ** CODE_BITSIZE - 1
 
 
 @click.group()
@@ -42,24 +41,22 @@ def decompress(archive: str):
 
 
 def _compress(archive: str, files: List[str]):
-    if len(files) == 0:
+    if not files:
         raise ValueError("At least one file is needed to be compressed into archive")
-    encoder = LZWEncoder(code_size=CODE_BIT)
-    # TODO: Use more concise itertools, like more_itertools.interleave
-    codes = chain(
-        ijoin([VIRTUAL_EOF], (encoder.encode_file(file) for file in files)),
-        [VIRTUAL_EOF],
-    )
+
     write_lzwfile_header(archive, files)
-    write_lzwfile_codes(archive, codes, code_size=CODE_BIT)
+
+    encoder = LZWEncoder(CODE_BITSIZE)
+    codes = chain.from_iterable(encoder.encode_file(file) for file in files)
+    write_lzwfile_codes(archive, codes, CODE_BITSIZE)
 
 
 def _decompress(archive: str):
     filenames = read_lzwfile_header(archive)
-    codes_list = split_at(
-        read_lzwfile_codes(archive, code_size=CODE_BIT), lambda x: x == VIRTUAL_EOF
+    codes_list = split_after(
+        read_lzwfile_codes(archive, CODE_BITSIZE), lambda x: x == VIRTUAL_EOF
     )
-    decoder = LZWDecoder(code_size=CODE_BIT)
+    decoder = LZWDecoder(CODE_BITSIZE)
     for filename, codes in zip(filenames, codes_list):
         decoder.decode_file(filename, codes)
 
