@@ -1,14 +1,14 @@
-from itertools import groupby, takewhile, zip_longest
+from itertools import takewhile, zip_longest
 from typing import *
 
-from more_itertools import all_equal
+from more_itertools import all_equal, ilen, padded
 
 __all__ = [
     "iindex",
-    "ilen",
+    "EmptyTailError",
+    "NotReachedTailError",
     "remove_tail",
     "ijoin",
-    "all_equal",
     "iequal",
     "iter_noexcept",
     "isplit",
@@ -17,14 +17,8 @@ __all__ = [
 
 
 def iindex(iterable: Iterable, target) -> int:
+    """ If the target is not in iterable, length of the iterable will be returned. """
     return ilen(takewhile(lambda x: x != target, iterable))
-
-
-def ilen(iterable: Iterable) -> int:
-    count = 0
-    for _ in iterable:
-        count += 1
-    return count
 
 
 class EmptyTailError(Exception):
@@ -34,6 +28,8 @@ class EmptyTailError(Exception):
 class NotReachedTailError(Exception):
     pass
 
+
+# Consider use itertools.tee and more_itertools.tail to simplify tail storage logic.
 
 # class disguised as function/callable
 class remove_tail:
@@ -103,7 +99,7 @@ def ijoin(separator: Iterable, iterables: Iterable[Iterable]) -> Iterable:
 
 
 def iequal(*iterables) -> int:
-    """ Find if contents of all iterables are equal """
+    """ Test if all iterable objects have identical contents """
     _sentinel = object()
     zipped = zip_longest(*iterables, fillvalue=_sentinel)
     return all(map(lambda x: all_equal(x), zipped))
@@ -112,18 +108,12 @@ def iequal(*iterables) -> int:
 StopIterationDummyObject = object()
 
 
-def iter_noexcept(l: Iterable) -> Iterator:
+def iter_noexcept(iterable: Iterable) -> Iterator:
     """
     An iterator wrapper, instead of raising exception on exhausion,
     yields StopIterationDummyObject.
     """
-    stream = iter(l)
-    while True:
-        yield next(stream, StopIterationDummyObject)
-
-    # yield from iter(l)
-    # while True:
-    #     yield StopIterationDummyObject
+    return padded(iterable, StopIterationDummyObject)
 
 
 # def takewhile_except(iterable: Iterable, sentinel: Any) -> Iterator:
@@ -140,16 +130,18 @@ def iter_noexcept(l: Iterable) -> Iterator:
 
 def isplit(l: Iterable, sep) -> Iterator[Iterable]:
     # Impl 1:
-    # stream = iter_noexcept(l)
-    # buffer = []
-    # for elem in stream:
-    #     if elem is StopIterationDummyObject:
-    #         break
-    #     if elem != sep:
-    #         buffer.append
-    #     else:
-    #         yield buffer
-    #         buffer.clear()
+    # If implemented this way, the returned generator, when
+    # passed to list(), get errorneous result, why?
+    stream = iter_noexcept(l)
+    buffer = []
+    for elem in stream:
+        if elem is StopIterationDummyObject:
+            break
+        if elem != sep:
+            buffer.append(elem)
+        else:
+            yield buffer
+            buffer.clear()
 
     # Impl 2:
     # stream = iter(l)
@@ -166,24 +158,25 @@ def isplit(l: Iterable, sep) -> Iterator[Iterable]:
 
     # Impl 3:
     # If implemented this way, the isplit function returns a
-    # generator object that is not able to be passed to list()
-    stream = iter(l)
-    stop_iteration_signal = 0
+    # generator object which, when passed to list() call, will
+    # lead to inifite waiting, why?
+    # stream = iter(l)
+    # stop_iteration_signal = 0
 
-    def generate_split():
-        nonlocal stop_iteration_signal
+    # def generate_split():
+    #     nonlocal stop_iteration_signal
 
-        for elem in stream:
-            if elem != sep:
-                yield elem
-            else:
-                return
+    #     for elem in stream:
+    #         if elem != sep:
+    #             yield elem
+    #         else:
+    #             return
 
-        stop_iteration_signal = 1
-        return
+    #     stop_iteration_signal = 1
+    #     return
 
-    while not stop_iteration_signal:
-        yield generate_split()
+    # while not stop_iteration_signal:
+    #     yield generate_split()
 
     # Impl 4:
     # takewhile_except

@@ -1,9 +1,10 @@
 # LZW Compressor
 
 [![License](https://img.shields.io/github/license/MapleCCC/LZW-Compressor?color=00BFFF)](http://www.wtfpl.net/)
-[![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.com/MapleCCC/LZW-Compressor)
-[![Test Coverage](https://img.shields.io/codecov/c/github/MapleCCC/LZW-Compressor/master)](https://codecov.io/gh/MapleCCC/LZW-Compressor)
-<!-- [![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.org/MapleCCC/LZW-Compressor) -->
+[![travisci](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.com/MapleCCC/LZW-Compressor)
+[![codecov](https://codecov.io/gh/MapleCCC/LZW-Compressor/branch/master/graph/badge.svg)](https://codecov.io/gh/MapleCCC/LZW-Compressor)
+<!-- [![Build Status](https://img.shields.io/travis/MapleCCC/LZW-Compressor.svg?logo=travis)](https://travis-ci.com/MapleCCC/LZW-Compressor) -->
+<!-- [![Test Coverage](https://img.shields.io/codecov/c/github/MapleCCC/LZW-Compressor/master?logo=codecov)](https://codecov.io/gh/MapleCCC/LZW-Compressor) -->
 
 ## Introduction
 

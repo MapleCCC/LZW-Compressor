@@ -1,5 +1,6 @@
 from typing import Dict
 
+from .trie import Trie
 from .utils import ascii2byte
 
 # TODO: use trie as code dict internal data structure
@@ -14,7 +15,7 @@ class CodeDict:
         if code_bit <= 8:
             raise ValueError("Code bit size should larger than 8")
 
-        self._storage: Dict[bytes, int] = dict()
+        self._storage: Dict[bytes, int] = Trie()
         # The first 256 codes are reserved for ASCII characters
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bit - 256 - 1

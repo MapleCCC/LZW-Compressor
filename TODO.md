@@ -12,7 +12,6 @@
 - add test suit for map-interface data structure
 - use hypothesis' iterables strategy, instead of lists, to avoid accidentally relying on sequence methods
 - Rename LZW package to lowercase lzw
-- Write README
 - Clean up code. Remove dead code. Polish comments. Add elaborate docstring.
 - Add test upon different code_bitsize
 - Add __all__ to modules
@@ -20,6 +19,10 @@
 - Add license
 - Add docstring for all significant functions
 - Add docstring to module level
+- Add icons to badges.
+- Customize badge style (color, size)
+- Add badge for Python version specification
+- Deal with the incompatibility between hypothesis and pytest fixture tmp_path.
 
 # Done
 
@@ -34,3 +37,4 @@
 - ask for clarification of spec: should we handle the case of zero compressed file?
 - Add GitHub README badge (CI passing unit testing cases, testing coverage rate, etc.)
 - Add CI. Travis, Codecov.
+- Write README
