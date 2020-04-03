@@ -1,4 +1,5 @@
 import setuptools
+from LZW import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -11,6 +12,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/MapleCCC/LZW-Compressor",
+    version=__version__,
     packages=setuptools.find_packages(),
     license="WTFPL 2.0",
     classifiers=[
