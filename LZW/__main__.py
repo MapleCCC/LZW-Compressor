@@ -4,9 +4,10 @@ from itertools import chain
 from typing import List
 
 import click
+from more_itertools import split_at
 
 from .codec import LZWDecoder, LZWEncoder
-from .extra_itertools import ijoin, isplit
+from .extra_itertools import ijoin
 from .lzwfile import (
     read_lzwfile_codes,
     read_lzwfile_header,
@@ -55,7 +56,9 @@ def _compress(archive: str, files: List[str]):
 
 def _decompress(archive: str):
     filenames = read_lzwfile_header(archive)
-    codes_list = isplit(read_lzwfile_codes(archive, code_size=CODE_BIT), VIRTUAL_EOF)
+    codes_list = split_at(
+        read_lzwfile_codes(archive, code_size=CODE_BIT), lambda x: x == VIRTUAL_EOF
+    )
     decoder = LZWDecoder(code_size=CODE_BIT)
     for filename, codes in zip(filenames, codes_list):
         decoder.decode_file(filename, codes)

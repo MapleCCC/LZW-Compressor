@@ -1,7 +1,7 @@
 from itertools import takewhile, zip_longest
 from typing import *
 
-from more_itertools import all_equal, ilen, padded
+from more_itertools import all_equal, ilen
 
 __all__ = [
     "iindex",
@@ -10,8 +10,6 @@ __all__ = [
     "remove_tail",
     "ijoin",
     "iequal",
-    "iter_noexcept",
-    "isplit",
     "takeuntil",
 ]
 
@@ -103,98 +101,6 @@ def iequal(*iterables) -> int:
     _sentinel = object()
     zipped = zip_longest(*iterables, fillvalue=_sentinel)
     return all(map(lambda x: all_equal(x), zipped))
-
-
-StopIterationDummyObject = object()
-
-
-def iter_noexcept(iterable: Iterable) -> Iterator:
-    """
-    An iterator wrapper, instead of raising exception on exhausion,
-    yields StopIterationDummyObject.
-    """
-    return padded(iterable, StopIterationDummyObject)
-
-
-# def takewhile_except(iterable: Iterable, sentinel: Any) -> Iterator:
-#     count = 0
-#     for elem in iterable:
-#         count += 1
-#         if elem != sentinel:
-#             yield elem
-#         else:
-#             return
-#     if count == 0:
-#         raise CustomExcept
-
-
-def isplit(l: Iterable, sep) -> Iterator[Iterable]:
-    # Impl 1:
-    # If implemented this way, the returned generator, when
-    # passed to list(), get errorneous result, why?
-    stream = iter_noexcept(l)
-    buffer = []
-    for elem in stream:
-        if elem is StopIterationDummyObject:
-            break
-        if elem != sep:
-            buffer.append(elem)
-        else:
-            yield buffer
-            buffer.clear()
-
-    # Impl 2:
-    # stream = iter(l)
-    # buffer = []
-    # try:
-    #     for elem in stream:
-    #         if elem != sep:
-    #             buffer.append(elem)
-    #         else:
-    #             yield buffer
-    #             buffer.clear()
-    # except StopIteration:
-    #     yield buffer
-
-    # Impl 3:
-    # If implemented this way, the isplit function returns a
-    # generator object which, when passed to list() call, will
-    # lead to inifite waiting, why?
-    # stream = iter(l)
-    # stop_iteration_signal = 0
-
-    # def generate_split():
-    #     nonlocal stop_iteration_signal
-
-    #     for elem in stream:
-    #         if elem != sep:
-    #             yield elem
-    #         else:
-    #             return
-
-    #     stop_iteration_signal = 1
-    #     return
-
-    # while not stop_iteration_signal:
-    #     yield generate_split()
-
-    # Impl 4:
-    # takewhile_except
-
-
-if __name__ == "__main__":
-    l = [1, 2, 3, 2, 3, 3]
-    s = isplit(l, 3)
-    a = next(s)
-    print(list(a))
-    a = next(s)
-    print(list(a))
-    a = next(s)
-    print(list(a))
-    a = next(s)
-    print(list(a))
-    a = next(s)
-    print(list(a))
 
 
 def takeuntil(iterable: Iterable, sentinel: Any) -> Iterator:
