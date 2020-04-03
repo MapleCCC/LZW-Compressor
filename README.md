@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/github/license/MapleCCC/LZW-Compressor?color=00BFFF)](http://www.wtfpl.net/)
 [![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.com/MapleCCC/LZW-Compressor)
+[![Test Coverage](https://img.shields.io/codecov/c/github/MapleCCC/LZW-Compressor/master)](https://codecov.io/gh/MapleCCC/LZW-Compressor)
 <!-- [![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.org/MapleCCC/LZW-Compressor) -->
 
 ## Introduction
@@ -48,6 +49,9 @@ $ python -m pip install -r requirements-test.txt
 
 # Base test
 $ make test
+
+# Test coverage
+$ make test-cov
 ```
 
 ## License

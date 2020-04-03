@@ -20,8 +20,6 @@
 - Add license
 - Add docstring for all significant functions
 - Add docstring to module level
-- Add GitHub README badge (CI passing unit testing cases, testing coverage rate, etc.)
-- Add CI. Travis, Codecov.
 
 # Done
 
@@ -34,3 +32,5 @@
 - consider rewriting in lazy evaluation / generator style, so as to save runtime space cost. Another importance of writing in stream style is that so our script can handle input that is infinitely large
 - preserve newline format. Disable Python's builtin default universal newline support feature.
 - ask for clarification of spec: should we handle the case of zero compressed file?
+- Add GitHub README badge (CI passing unit testing cases, testing coverage rate, etc.)
+- Add CI. Travis, Codecov.
