@@ -1,7 +1,7 @@
 # LZW Compressor
 
 [![License](https://img.shields.io/github/license/MapleCCC/LZW-Compressor?color=00BFFF)](http://www.wtfpl.net/)
-[![Build Status](https://img.shields.io/travis/MapleCCC/LZW-Compressor.svg)](https://travis-ci.org/MapleCCC/LZW-Compressor)
+[![Build Status](https://img.shields.io/travis/MapleCCC/LZW-Compressor.svg)](https://travis-ci.com/MapleCCC/LZW-Compressor)
 <!-- [![Build Status](https://www.travis-ci.com/MapleCCC/LZW-Compressor.svg?branch=master)](https://travis-ci.org/MapleCCC/LZW-Compressor) -->
 
 ## Introduction
