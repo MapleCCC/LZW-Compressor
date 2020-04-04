@@ -1,4 +1,4 @@
-from typing import ByteString, Iterable
+from typing import Iterable
 
 import pytest
 from hypothesis import given
@@ -27,7 +27,7 @@ bits = sampled_from(Bit)
 
 
 # @given(binary())
-# def test_bytes(bs: ByteString) -> None:
+# def test_bytes(bs: bytes) -> None:
 #     if not bs:
 #         assert bytes2int(bs) == 0
 #         assert list(bytes2bits(bs)) == []

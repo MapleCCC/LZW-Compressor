@@ -1,4 +1,4 @@
-from typing import ByteString, Dict
+from typing import Dict
 
 from .trie import Trie
 from .utils import ascii2byte
@@ -43,7 +43,7 @@ class StrDict:
             raise KeyError(f"Code not present in StrDict: {key}")
         return self._storage[key]
 
-    def add_new_str(self, string: ByteString) -> None:
+    def add_new_str(self, string: bytes) -> None:
         if string in self._storage.values():
             raise ValueError(f'string already in StrDict: "{string}"')
 

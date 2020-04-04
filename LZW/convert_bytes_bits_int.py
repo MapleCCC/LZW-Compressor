@@ -1,6 +1,6 @@
 import math
 from functools import reduce
-from typing import ByteString, Iterable, Iterator, List
+from typing import Iterable, Iterator, List
 
 from more_itertools import grouper
 
@@ -26,7 +26,7 @@ def most_significant_bit_number(x: int) -> int:
 
 
 # 31 -> b'\x31'
-def int2bytes(x: int) -> ByteString:
+def int2bytes(x: int) -> bytes:
     """
     Different from builtin int.to_bytes in that there is no positional
     arguments: length and byteorder. This function will automatically
@@ -44,7 +44,7 @@ def int2bytes(x: int) -> ByteString:
 
 
 # b'1' = b'\x31' -> 31
-def bytes2int(bs: ByteString) -> int:
+def bytes2int(bs: bytes) -> int:
     """
     Boundary Conditions:
     empty bytes yield 0
@@ -53,7 +53,7 @@ def bytes2int(bs: ByteString) -> int:
 
 
 # b'1' = b'\x31' -> [1,1,0,0,0,1]
-def bytes2bits(bs: ByteString) -> Iterator[Bit]:
+def bytes2bits(bs: bytes) -> Iterator[Bit]:
     """ Empty bytes yield empty output """
     for byte in iterbytes(bs):
         bits = int2bits(byte2ascii(byte))
@@ -61,7 +61,7 @@ def bytes2bits(bs: ByteString) -> Iterator[Bit]:
 
 
 # (0,0,1,1,0,0,0,1) -> b'1'
-def bits2bytes(bits: Iterable[Bit]) -> ByteString:
+def bits2bytes(bits: Iterable[Bit]) -> bytes:
     """
     If bits number is not multiple of eight, exception is raised.
 

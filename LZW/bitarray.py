@@ -1,4 +1,4 @@
-from typing import ByteString, Iterable, Union
+from typing import Iterable, Union
 
 from .bit import Bit
 from .convert_bytes_bits_int import *
@@ -77,17 +77,17 @@ class Bitarray:
         self._storage.extend(iterable)
 
     # No need to have both push_bytes_back and push_byte_back. One interface suffices
-    def push_bytes_back(self, bs: ByteString) -> None:
+    def push_bytes_back(self, bs: bytes) -> None:
         self._storage.extend(bytes2bits(bs))
 
     # We can either implement pop_byte_front in terms of pop_bytes_from (top-down approach),
     # or implement pop_bytes_front in terms of pop_byte_front (bottom-up approach)
-    def pop_byte_front(self) -> ByteString:
+    def pop_byte_front(self) -> bytes:
         if len(self._storage) < 8:
             raise IndexError("pop byte from bitarray with less than 8 bits")
         return self.pop_bytes_front(1)
 
-    def pop_bytes_front(self, n: int = 1) -> ByteString:
+    def pop_bytes_front(self, n: int = 1) -> bytes:
         if len(self._storage) < 8 * n:
             raise IndexError(
                 "pop bytes number exceeds bitarray's containing bytes' number"

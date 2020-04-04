@@ -1,4 +1,4 @@
-from typing import ByteString, Iterable
+from typing import Iterable
 
 import pytest
 from hypothesis import given
@@ -23,7 +23,7 @@ def test_int_conversion_reverse(l: Iterable[Bit]):
 
 
 @given(binary(min_size=1))
-def test_push_pop(bs: ByteString) -> None:
+def test_push_pop(bs: bytes) -> None:
     ba = Bitarray()
     ba.push_bytes_back(bs)
     assert ba.pop_byte_front() == ascii2byte(bs[0])
@@ -31,7 +31,7 @@ def test_push_pop(bs: ByteString) -> None:
 
 
 @given(just(b""))
-def test_push_pop_empty_input(bs: ByteString) -> None:
+def test_push_pop_empty_input(bs: bytes) -> None:
     ba = Bitarray()
     ba.push_bytes_back(bs)
     with pytest.raises(IndexError):

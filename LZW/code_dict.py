@@ -1,4 +1,4 @@
-from typing import ByteString, Dict
+from typing import Dict
 
 from .trie import Trie
 from .utils import ascii2byte
@@ -15,7 +15,7 @@ class CodeDict:
         if code_bit <= 8:
             raise ValueError("Code bit size should larger than 8")
 
-        self._storage: Dict[ByteString, int] = Trie()
+        self._storage: Dict[bytes, int] = Trie()
         # The first 256 codes are reserved for ASCII characters
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bit - 256 - 1
@@ -35,17 +35,17 @@ class CodeDict:
         for i in range(256):
             self._storage[ascii2byte(i)] = i
 
-    def __contains__(self, item: ByteString) -> bool:
+    def __contains__(self, item: bytes) -> bool:
         """ Check string membership """
         return item in self._storage
 
-    def __getitem__(self, key: ByteString) -> int:
+    def __getitem__(self, key: bytes) -> int:
         try:
             return self._storage[key]
         except KeyError:
             raise KeyError(f'code is missing for string: "{key}"')
 
-    def add_new_code(self, item: ByteString) -> None:
+    def add_new_code(self, item: bytes) -> None:
         if self.__contains__(item):
             raise ValueError(f"{item} already in code dict")
 

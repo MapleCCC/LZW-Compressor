@@ -1,7 +1,7 @@
 import os
 import shutil
 import uuid
-from typing import ByteString, List
+from typing import List
 
 from hypothesis import given
 from hypothesis.strategies import binary, lists
@@ -20,7 +20,7 @@ TEST_FILES_BUILD_STRATEGY = lists(
 
 
 @given(l=TEST_FILES_BUILD_STRATEGY)
-def test_integration(l: List[ByteString], tmp_path) -> None:
+def test_integration(l: List[bytes], tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.

@@ -1,8 +1,8 @@
-from typing import ByteString, Iterator
+from typing import Iterator
 
 
 # Reference: https://www.python.org/dev/peps/pep-0467/#addition-of-getbyte-method-to-retrieve-a-single-byte
-def getbyte(bs: ByteString, index: int) -> bytes:
+def getbyte(bs: bytes, index: int) -> bytes:
     try:
         return bs[index].to_bytes(1, "big")
     except IndexError:
@@ -10,7 +10,7 @@ def getbyte(bs: ByteString, index: int) -> bytes:
 
 
 # Reference: https://www.python.org/dev/peps/pep-0467/#addition-of-optimised-iterator-methods-that-produce-bytes-objects
-def iterbytes(bs: ByteString) -> Iterator[bytes]:
+def iterbytes(bs: bytes) -> Iterator[bytes]:
     """
     Iterate through bytes object and emit 1-length
     bytes each time, instead of int.
