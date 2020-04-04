@@ -1,4 +1,5 @@
 import setuptools
+
 from LZW import __version__
 
 with open("README.md", "r", encoding="utf-8") as fh:

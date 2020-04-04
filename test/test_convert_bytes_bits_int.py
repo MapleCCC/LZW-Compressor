@@ -4,8 +4,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import binary, integers, iterables, sampled_from
 
-from LZW.convert_bytes_bits_int import *
 from LZW.bit import Bit
+from LZW.convert_bytes_bits_int import *
 
 # It happens that we can not use property-based test framework here.
 # Manual test cases are needed, instead.

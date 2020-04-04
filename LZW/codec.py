@@ -20,7 +20,7 @@ class LZWEncoder:
 
     __slots__ = ["_code_dict", "_virtual_eof"]
 
-    def encode_file(self, filename: AnyStr) -> Iterable[int]:
+    def encode_file(self, filename: AnyStr) -> Iterable[Code]:
         fs = FileInStreamer(filename, mode="rb")
         return iappend(self._encode(fs), self._virtual_eof)
 

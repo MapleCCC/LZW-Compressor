@@ -4,7 +4,7 @@ import uuid
 from typing import Iterable
 
 from hypothesis import given
-from hypothesis.strategies import integers, text, iterables
+from hypothesis.strategies import integers, iterables, text
 
 from LZW.lzwfile import *
 

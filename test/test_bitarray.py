@@ -4,9 +4,9 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import binary, integers, iterables, just, sampled_from
 
+from LZW.bit import Bit
 from LZW.bitarray import Bitarray
 from LZW.utils import ascii2byte
-from LZW.bit import Bit
 
 bits = sampled_from(Bit)
 

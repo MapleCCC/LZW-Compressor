@@ -2,7 +2,7 @@ from itertools import chain, tee
 from typing import Iterable, List
 
 from hypothesis import assume, given
-from hypothesis.strategies import integers, lists, iterables
+from hypothesis.strategies import integers, iterables, lists
 
 from LZW.extra_itertools import *
 

@@ -68,11 +68,11 @@ def bits2bytes(bits: Iterable[Bit]) -> bytes:
     Boundary Conditions:
     empty input yields empty bytes
     """
-    bits = list(bits)
-    if len(bits) % 8 != 0:
+    bit_list = list(bits)
+    if len(bit_list) % 8 != 0:
         raise ValueError("bits number needs to be multiples of eight")
     ret = b""
-    for eight_bits in grouper(bits, 8):
+    for eight_bits in grouper(bit_list, 8):
         ret += ascii2byte(bits2int(eight_bits))
     return ret
 
