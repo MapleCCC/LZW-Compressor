@@ -17,6 +17,9 @@ __all__ = (
     "read_lzwfile_codes",
     "write_lzwfile_header",
     "write_lzwfile_codes",
+    "Entry",
+    "Header",
+    "Code",
 )
 
 Entry = str
