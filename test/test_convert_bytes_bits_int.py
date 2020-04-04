@@ -2,12 +2,15 @@ from typing import *
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import binary, integers, iterables
+from hypothesis.strategies import binary, integers, iterables, sampled_from
 
 from LZW.convert_bytes_bits_int import *
+from LZW.bit import Bit
 
 # It happens that we can not use property-based test framework here.
 # Manual test cases are needed, instead.
+
+bits = sampled_from(Bit)
 
 # @given(integers())
 # def test_int(x: int) -> None:
@@ -35,7 +38,7 @@ from LZW.convert_bytes_bits_int import *
 #         assert bits2bytes(int2bits(bytes2int(bs))) == bs
 
 
-# @given(iterables(integers(min_value=0, max_value=1), min_size=1))
+# @given(iterables(bits))
 # def test_non_empty_bits(bits: Iterable[Bit]) -> None:
 #     assert bytes2bits(bits2bytes(bits)) == bits
 #     assert int2bits(bits2int(bits)) == bits

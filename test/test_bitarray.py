@@ -2,13 +2,13 @@ from typing import *
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import binary, integers, iterables, just
+from hypothesis.strategies import binary, integers, iterables, just, sampled_from
 
 from LZW.bitarray import Bitarray
 from LZW.utils import ascii2byte
 from LZW.bit import Bit
 
-bits = integers(min_value=0, max_value=1)
+bits = sampled_from(Bit)
 
 
 @given(integers(min_value=0))
