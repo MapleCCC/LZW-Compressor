@@ -22,7 +22,7 @@ def test_lzwfile_header(l: Header, tmp_path):
     os.chdir(subpath)
 
     write_lzwfile_header("file", l)
-    assert list(read_lzwfile_header("file")) == l
+    assert list(read_lzwfile_header("file")) == list(l)
 
 
 CODE_BITSIZE = 12
@@ -39,4 +39,4 @@ def test_lzwfile_codes(l: Iterable[Code], tmp_path) -> None:
     os.chdir(subpath)
 
     write_lzwfile_codes("file", l, CODE_BITSIZE)
-    assert list(read_lzwfile_codes("file", CODE_BITSIZE)) == l
+    assert list(read_lzwfile_codes("file", CODE_BITSIZE)) == list(l)
