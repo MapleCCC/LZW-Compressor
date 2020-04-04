@@ -6,7 +6,7 @@ from typing import *
 from hypothesis import given
 from hypothesis.strategies import binary, lists
 
-from LZW.__main__ import _compress, _decompress
+from LZW.__main__ import lzw_compress, lzw_decompress
 from LZW.utils import is_equal_file
 
 MAX_TEST_FILE_LEN = 10000
@@ -32,12 +32,12 @@ def test_integration(l: List[ByteString], tmp_path) -> None:
         with open(test_file, "wb") as f:
             f.write(s)
 
-    _compress("a.lzw", test_files)
+    lzw_compress("a.lzw", test_files)
 
     for test_file in test_files:
         shutil.move(test_file, test_file + "old")
 
-    _decompress("a.lzw")
+    lzw_decompress("a.lzw")
 
     for test_file in test_files:
         assert is_equal_file(test_file, test_file + "old", mode="rb")
