@@ -4,7 +4,7 @@ from typing import Iterable, List
 from hypothesis import assume, given
 from hypothesis.strategies import integers, iterables, lists
 
-from LZW.extra_itertools import *
+from LZW.extra_itertools import iappend, iequal
 
 
 @given(iterables(integers()), integers(min_value=0, max_value=10))

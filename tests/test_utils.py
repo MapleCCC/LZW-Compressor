@@ -5,7 +5,7 @@ import uuid
 from hypothesis import given
 from hypothesis.strategies import text
 
-from LZW.utils import *
+from LZW.utils import is_equal_file, undecorate
 
 
 @given(s=text(), t=text())

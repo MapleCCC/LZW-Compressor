@@ -1,7 +1,7 @@
 from typing import Iterable, Union
 
 from .bit import Bit
-from .convert_bytes_bits_int import *
+from .convert_bytes_bits_int import bits2bytes, bits2int, bytes2bits, int2bits
 
 
 # Mimic the interface of the builtin bytearray object

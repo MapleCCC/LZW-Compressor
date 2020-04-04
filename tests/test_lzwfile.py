@@ -7,7 +7,14 @@ from typing import Iterable
 from hypothesis import given
 from hypothesis.strategies import integers, iterables, text
 
-from LZW.lzwfile import *
+from LZW.lzwfile import (
+    Code,
+    Header,
+    read_lzwfile_codes,
+    read_lzwfile_header,
+    write_lzwfile_codes,
+    write_lzwfile_header,
+)
 
 # Reference: https://en.wikipedia.org/wiki/Filename#Comparison_of_filename_limitations
 portable_filename_alphabet = string.ascii_letters + string.digits + "._-"
