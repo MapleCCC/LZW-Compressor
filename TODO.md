@@ -23,6 +23,33 @@
 - Customize badge style (color, size)
 - Add badge for Python version specification
 - Deal with the incompatibility between hypothesis and pytest fixture tmp_path.
+- Add badge for LOC
+- Use Union[str, bytes, int, os.PathLike] to annotate open()'s passed in argument
+- Use pytest-subtesthack plugin to deal with fixture integration problem.
+- Test on more max_file_len and max_file_num.
+- Type annotate tmp_path fixture argument
+- Try doctest
+- Should we pin dependencies' versions in requirements.txt?
+  - https://nvie.com/posts/pin-your-packages/
+- Use pylint_runner third-party tool
+- Don't misuse AnyStr for type annotation
+- Type annotate variant positional argument and variant keyword argument
+- tox vs pytest vs nose
+- Increase coverage rate to over 95%. 99% is better.
+- Deal with TODOs spread across the project
+- Ref links:
+  - hypothesis' integration problem with pytest fixture
+    - https://github.com/HypothesisWorks/hypothesis/issues/65
+    - https://github.com/HypothesisWorks/hypothesis/issues/377
+    - https://github.com/HypothesisWorks/hypothesis/issues/2370
+  - pylint unable to do "pylint ."
+    - https://github.com/PyCQA/pylint/issues/352
+    - possible workaround: https://github.com/MasterOdin/pylint_runner
+  - isort unable to do "isort ."
+  - bytes used as shorthand to replace ByteString, when used as type annotation
+    - https://docs.python.org/3.8/library/typing.html#typing.ByteString
+  - pin your pip requirements/dependencies
+    - https://nvie.com/posts/pin-your-packages/
 
 # Done
 
@@ -38,3 +65,13 @@
 - Add GitHub README badge (CI passing unit testing cases, testing coverage rate, etc.)
 - Add CI. Travis, Codecov.
 - Write README
+- Use sampled_from(Bit) to replace integers(min_value=0, max_value=1), because integers() strategy shrinks towards 0 and leads to unbalanced example, which is undesirable behavior.
+- Expand wildcard imports from typing module to concrete names
+- Use bytes as shorthand type hint to replace ByteString
+- Add .pylintrc project-wise
+- Rename CODE_BIT to CODE_BITSIZE
+- Rename test/ directory to tests/
+- Add .coveragerc, config file for coverage.py
+- Add badge for code style (black)
+- Remove .gitmodules
+- Expand all wildcard imports

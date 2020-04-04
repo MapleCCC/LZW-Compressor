@@ -7,6 +7,8 @@ from hypothesis.strategies import text
 
 from LZW.utils import is_equal_file, undecorate
 
+# TODO: test on binary files
+
 
 @given(s=text(), t=text())
 def test_is_equal_file(s: str, t: str, tmp_path) -> None:

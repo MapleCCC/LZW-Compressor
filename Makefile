@@ -1,4 +1,4 @@
-# MAKEFLAGS += .silent
+MAKEFLAGS += .silent
 
 TEST_DIR=tests
 SRC_DIR=LZW
@@ -11,6 +11,7 @@ test-stat:
 
 test-cov:
 	pytest --cov=${SRC_DIR} ${TEST_DIR}
+	# Alternatively, we can run: coverage run
 	coverage html
 
 lint:
@@ -25,6 +26,9 @@ check-unused-imports:
 
 # Set alias for easy typing
 cui: check-unused-imports
+
+todo:
+	grep -ri --include=*.py TODO
 
 reformat:
 	# executing "isort ." command yields failure, why? TODO: try to deal with it.
