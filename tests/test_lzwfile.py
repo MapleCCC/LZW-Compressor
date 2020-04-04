@@ -1,6 +1,7 @@
 import os
 import string
 import uuid
+from itertools import tee
 from typing import Iterable
 
 from hypothesis import given
@@ -21,8 +22,10 @@ def test_lzwfile_header(l: Header, tmp_path):
     subpath.mkdir()
     os.chdir(subpath)
 
-    write_lzwfile_header("file", l)
-    assert list(read_lzwfile_header("file")) == list(l)
+    l1, l2 = tee(l)
+
+    write_lzwfile_header("file", l1)
+    assert list(read_lzwfile_header("file")) == list(l2)
 
 
 CODE_BITSIZE = 12
@@ -38,5 +41,7 @@ def test_lzwfile_codes(l: Iterable[Code], tmp_path) -> None:
     subpath.mkdir()
     os.chdir(subpath)
 
-    write_lzwfile_codes("file", l, CODE_BITSIZE)
-    assert list(read_lzwfile_codes("file", CODE_BITSIZE)) == list(l)
+    l1, l2 = tee(l)
+
+    write_lzwfile_codes("file", l1, CODE_BITSIZE)
+    assert list(read_lzwfile_codes("file", CODE_BITSIZE)) == list(l2)
