@@ -1,10 +1,10 @@
 import os
 import string
 import uuid
-from typing import List
+from typing import *
 
 from hypothesis import given
-from hypothesis.strategies import integers, lists, text
+from hypothesis.strategies import integers, text, iterables
 
 from LZW.lzwfile import *
 
@@ -12,8 +12,8 @@ from LZW.lzwfile import *
 portable_filename_alphabet = string.ascii_letters + string.digits + "._-"
 
 
-@given(l=lists(text(portable_filename_alphabet, min_size=1)))
-def test_lzwfile_header(l: List[str], tmp_path):
+@given(l=iterables(text(portable_filename_alphabet, min_size=1)))
+def test_lzwfile_header(l: Header, tmp_path):
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -25,12 +25,12 @@ def test_lzwfile_header(l: List[str], tmp_path):
     assert list(read_lzwfile_header("file")) == l
 
 
-CODE_BIT = 12
-MAX_CODE = 2 ** CODE_BIT - 1
+CODE_BITSIZE = 12
+MAX_CODE = 2 ** CODE_BITSIZE - 1
 
 
-@given(l=lists(integers(min_value=0, max_value=MAX_CODE)))
-def test_lzwfile_codes(l: List[int], tmp_path) -> None:
+@given(l=iterables(integers(min_value=0, max_value=MAX_CODE)))
+def test_lzwfile_codes(l: Iterable[Code], tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -38,5 +38,5 @@ def test_lzwfile_codes(l: List[int], tmp_path) -> None:
     subpath.mkdir()
     os.chdir(subpath)
 
-    write_lzwfile_codes("file", l, CODE_BIT)
-    assert list(read_lzwfile_codes("file", CODE_BIT)) == l
+    write_lzwfile_codes("file", l, CODE_BITSIZE)
+    assert list(read_lzwfile_codes("file", CODE_BITSIZE)) == l

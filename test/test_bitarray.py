@@ -2,10 +2,13 @@ from typing import *
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import binary, integers, iterables
+from hypothesis.strategies import binary, integers, iterables, just
 
 from LZW.bitarray import Bitarray
 from LZW.utils import ascii2byte
+from LZW.bit import Bit
+
+bits = integers(min_value=0, max_value=1)
 
 
 @given(integers(min_value=0))
@@ -13,25 +16,31 @@ def test_int_conversion(x: int) -> None:
     assert Bitarray.from_int(x).to_int() == x
 
 
-@given(iterables(integers(min_value=0, max_value=1)))
-def test_int_conversion_reverse(l: Iterable[int]):
+@given(iterables(bits))
+def test_int_conversion_reverse(l: Iterable[Bit]):
     b = Bitarray(l)
     assert Bitarray.from_int(b.to_int()).to_int() == b.to_int()
 
 
-@given(binary())
+@given(binary(min_size=1))
 def test_push_pop(bs: ByteString) -> None:
     ba = Bitarray()
     ba.push_bytes_back(bs)
-    if len(bs) > 0:
-        assert ba.pop_byte_front() == ascii2byte(bs[0])
-        assert ba.pop_bytes_front(len(bs) - 1) == bytearray(bs)[1:]
-    else:
-        with pytest.raises(IndexError):
-            ba.pop_byte_front()
-        with pytest.raises(IndexError):
-            ba.pop_bytes_front()
+    assert ba.pop_byte_front() == ascii2byte(bs[0])
+    assert ba.pop_bytes_front(len(bs) - 1) == bytearray(bs)[1:]
 
 
-def test_repr():
-    pass
+@given(just(b""))
+def test_push_pop_empty_input(bs: ByteString) -> None:
+    ba = Bitarray()
+    ba.push_bytes_back(bs)
+    with pytest.raises(IndexError):
+        ba.pop_byte_front()
+    with pytest.raises(IndexError):
+        ba.pop_bytes_front()
+
+
+@given(iterables(bits))
+def test_repr(l: Iterable[Bit]):
+    b = Bitarray(l)
+    assert eval(repr(b)) == b

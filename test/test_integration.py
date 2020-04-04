@@ -10,8 +10,9 @@ from LZW.__main__ import lzw_compress, lzw_decompress
 from LZW.utils import is_equal_file
 
 MAX_TEST_FILE_LEN = 10000
-MAX_NUM_TEST_FILES = 3
+MAX_NUM_TEST_FILES = 3  # TODO: increase number of test files
 
+# TODO: add test case for code dict overflow
 
 TEST_FILES_BUILD_STRATEGY = lists(
     binary(max_size=MAX_TEST_FILE_LEN), min_size=1, max_size=MAX_NUM_TEST_FILES,
