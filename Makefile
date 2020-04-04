@@ -1,6 +1,6 @@
 # MAKEFLAGS += .silent
 
-TEST_DIR=test
+TEST_DIR=tests
 SRC_DIR=LZW
 
 test:
