@@ -11,16 +11,21 @@ test-cov:
 	coverage html
 
 lint:
-	pylint *.py **/*.py
+	# For pylint, "lint all files under all subdir" is a long requested feature that is not yet realized
+	# Ref: https://github.com/PyCQA/pylint/issues/352
+	find LZW/ test/ -type f -name "*.py" | xargs pylint
 
 check-unused-imports:
-	pylint *.py **/*.py --disable=all --enable=W0611
+	# For pylint, "lint all files under all subdir" is a long requested feature that is not yet realized
+	# Ref: https://github.com/PyCQA/pylint/issues/352
+	find LZW/ test/ -type f -name "*.py" | xargs pylint --disable=all --enable=W0611
 
 # Set alias for easy typing
 cui: check-unused-imports
 
 reformat:
-	isort *.py **/*.py
+	# executing "isort ." command yields failure, why? TODO: try to deal with it.
+	find LZW/ test/ -type f -name "*.py" | xargs isort
 	black .
 
 # TODO: recursively remove pycache folders
