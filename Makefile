@@ -1,13 +1,5 @@
 # MAKEFLAGS += .silent
 
-CXX=g++
-CXXFLAGS=-g
-PROGS=lzw
-
-all: ${PROGS}
-
-lzw: lzw.cpp
-
 test:
 	pytest test/
 
@@ -28,7 +20,9 @@ reformat:
 	isort *.py **/*.py
 	black .
 
+# TODO: recursively remove pycache folders
 clean:
-	rm -f lzw
+	rm -rf __pycache__/ .pytest_cache/ .hypothesis/ htmlcov/ .coverage
+	# py3clean script
 
-.PHONY: all test simple-test lint check-unused-imports reformat clean
+.PHONY: test test-stat test-cov lint check-unused-imports reformat clean
