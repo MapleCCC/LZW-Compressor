@@ -1,4 +1,4 @@
-from typing import *
+from typing import ByteString, Iterable
 
 import pytest
 from hypothesis import given

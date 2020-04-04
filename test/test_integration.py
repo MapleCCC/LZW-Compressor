@@ -1,7 +1,7 @@
 import os
 import shutil
 import uuid
-from typing import *
+from typing import ByteString, List
 
 from hypothesis import given
 from hypothesis.strategies import binary, lists

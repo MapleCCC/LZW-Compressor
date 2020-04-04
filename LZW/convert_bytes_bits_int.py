@@ -1,6 +1,6 @@
 import math
 from functools import reduce
-from typing import *
+from typing import ByteString, Iterable, Iterator, List
 
 from more_itertools import grouper
 

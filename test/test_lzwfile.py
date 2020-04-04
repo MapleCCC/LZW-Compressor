@@ -1,7 +1,7 @@
 import os
 import string
 import uuid
-from typing import *
+from typing import Iterable
 
 from hypothesis import given
 from hypothesis.strategies import integers, text, iterables

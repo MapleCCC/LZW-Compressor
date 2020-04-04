@@ -1,10 +1,10 @@
-from typing import *
+from typing import AnyStr, ByteString, Callable
 
 from .extra_itertools import iequal
 from .iostream import FileInStreamer
 
 
-def is_equal_file(*filenames, mode: str = "r", **kwargs) -> int:
+def is_equal_file(*filenames: AnyStr, mode: str = "r", **kwargs) -> int:
     fs_itr = (FileInStreamer(filename, mode, **kwargs) for filename in filenames)
     return iequal(*fs_itr)
 
@@ -19,7 +19,7 @@ def undecorate(func: Callable) -> Callable:
     return ret
 
 
-def ascii2byte(x: int) -> bytes:
+def ascii2byte(x: int) -> ByteString:
     if not 0 <= x <= 255:
         raise ValueError
     return x.to_bytes(1, "big")

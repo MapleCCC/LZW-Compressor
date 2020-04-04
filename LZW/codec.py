@@ -1,4 +1,4 @@
-from typing import *
+from typing import AnyStr, Iterable, Iterator
 
 from .code_dict import CodeDict
 from .extra_itertools import iappend

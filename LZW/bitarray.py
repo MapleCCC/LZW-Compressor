@@ -1,4 +1,4 @@
-from typing import *
+from typing import ByteString, Iterable, Union
 
 from .bit import Bit
 from .convert_bytes_bits_int import *

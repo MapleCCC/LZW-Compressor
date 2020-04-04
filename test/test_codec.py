@@ -1,7 +1,7 @@
 import os
 import uuid
 from random import sample
-from typing import *
+from typing import ByteString
 
 from hypothesis import example, given, settings
 from hypothesis.strategies import binary

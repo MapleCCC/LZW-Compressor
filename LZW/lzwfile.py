@@ -5,10 +5,9 @@ provides simple tools to retrieve and process LZW files.
 
 import os
 from itertools import takewhile
-from typing import *
 
 # non-wildcard import, because BinaryIO is not part of public API
-from typing import BinaryIO
+from typing import AnyStr, BinaryIO, Iterable, Iterator
 
 from .bitarray import Bitarray
 from .iostream import FileInStreamer
@@ -25,7 +24,7 @@ Header = Iterable[Entry]
 Code = int
 
 
-def read_lzwfile_header(lzwfile: str) -> Iterable[str]:
+def read_lzwfile_header(lzwfile: AnyStr) -> Iterable[str]:
     with open(lzwfile, "rb") as f:
         entry = f.readline().strip()
         while entry != b"":
@@ -33,7 +32,7 @@ def read_lzwfile_header(lzwfile: str) -> Iterable[str]:
             entry = f.readline().strip()
 
 
-def write_lzwfile_header(lzwfile: str, header: Header) -> None:
+def write_lzwfile_header(lzwfile: AnyStr, header: Header) -> None:
     if os.path.isfile(lzwfile):
         # TODO: how to implement?
         raise NotImplementedError
@@ -44,7 +43,7 @@ def write_lzwfile_header(lzwfile: str, header: Header) -> None:
             f.write(b"\n")
 
 
-def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
+def read_lzwfile_codes(lzwfile: AnyStr, code_size: int) -> Iterator[Code]:
     def readline_from_bytestream(fs: FileInStreamer) -> bytes:
         return b"".join(takewhile(lambda byte: byte != b"\n", fs))
 
@@ -66,7 +65,7 @@ def read_lzwfile_codes(lzwfile: str, code_size: int) -> Iterator[Code]:
             yield code
 
 
-def write_lzwfile_codes(lzwfile, codes: Iterable[Code], code_size: int) -> None:
+def write_lzwfile_codes(lzwfile: AnyStr, codes: Iterable[Code], code_size: int) -> None:
     def _write_codes(f: BinaryIO):
         buffer = Bitarray()
 
