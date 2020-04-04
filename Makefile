@@ -11,7 +11,7 @@ test-cov:
 	coverage html
 
 lint:
-	pylint *.py **/*.py --errors-only
+	pylint *.py **/*.py
 
 check-unused-imports:
 	pylint *.py **/*.py --disable=all --enable=W0611
