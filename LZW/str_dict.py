@@ -14,12 +14,11 @@ class StrDict:
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bitsize - 1 - 256
         self._size = 0
-        self._count = 0
 
         for i in range(256):
             self._storage[i] = ascii2byte(i)
 
-    __slots__ = ("_storage", "_capacity", "_size", "_count")
+    __slots__ = ("_storage", "_capacity", "_size")
 
     def clear(self) -> None:
         self._storage.clear()
@@ -47,8 +46,7 @@ class StrDict:
         if string in self._storage.values():
             raise ValueError(f'string already in StrDict: "{string}"')
 
-        self._storage[self._count + 256] = string
-        self._count += 1
+        self._storage[self._size + 256] = string
         self._size += 1
 
         if self._size == self._capacity:

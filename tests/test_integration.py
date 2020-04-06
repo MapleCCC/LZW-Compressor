@@ -1,25 +1,36 @@
 import os
 import shutil
 import uuid
+from random import sample
 from typing import List
 
-from hypothesis import given
-from hypothesis.strategies import binary, lists
+from hypothesis import given, example, settings
+from hypothesis.strategies import binary, lists, builds
 
 from LZW.__main__ import lzw_compress, lzw_decompress
-from LZW.utils import is_equal_file
+from LZW.utils import is_equal_file, ascii2byte
 
 MAX_TEST_FILE_LEN = 10000
 MAX_NUM_TEST_FILES = 3  # TODO: increase number of test files
 
-# TODO: add test case for code dict overflow
 
 TEST_FILES_BUILD_STRATEGY = lists(
     binary(max_size=MAX_TEST_FILE_LEN), min_size=1, max_size=MAX_NUM_TEST_FILES,
 )
 
+# All possible one-length bytes
+VALID_CHARSET = [ascii2byte(i) for i in range(256)]
+OVERFLOW_TEST_EXAMPLE_STRATEGY = builds(
+    lambda: b"".join(b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20))
+)
+EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
+    b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20)
+)
+
 
 @given(l=TEST_FILES_BUILD_STRATEGY)
+@example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
+@settings(deadline=None)
 def test_integration(l: List[bytes], tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same

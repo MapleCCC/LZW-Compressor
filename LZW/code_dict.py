@@ -20,13 +20,12 @@ class CodeDict:
         # The last code is reserved for virtual EOF
         self._capacity = 2 ** code_bitsize - 256 - 1
         self._size = 0
-        self._count = 0
 
         for i in range(256):
             self._storage[ascii2byte(i)] = i
 
     # Test if adding __slots__ actually accelerate or excerbate performance
-    __slots__ = ("_storage", "_capacity", "_size", "_count")
+    __slots__ = ("_storage", "_capacity", "_size")
 
     def clear(self) -> None:
         self._storage.clear()
@@ -49,8 +48,7 @@ class CodeDict:
         if self.__contains__(item):
             raise ValueError(f"{item} already in code dict")
 
-        self._storage[item] = self._count + 256
-        self._count += 1
+        self._storage[item] = self._size + 256
         self._size += 1
 
         if self._size == self._capacity:

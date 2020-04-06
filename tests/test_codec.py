@@ -30,6 +30,8 @@ def test_encode_decode(s: bytes) -> None:
 
 
 @given(s=binary(max_size=MAX_FILE_LEN))
+@example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
+@settings(deadline=None)
 def test_encode_decode_file(s: bytes, tmp_path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
