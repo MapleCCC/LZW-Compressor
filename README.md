@@ -11,7 +11,7 @@
 
 LZW is an archive format that utilize power of LZW compression algorithm. [LZW compression algorithm](https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch) is a dictionary-based loseless algorithm. It's an old algorithm suitable for beginner to practice.
 
-Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files.
+Internal algorithm processes byte data. So it's applicable to any file types, besides text file. Although it may not be able to achieve substantial compression rate for some file types that are already compressed efficiently, such as PDF files and MP4 files.
 
 ## Installation
 
@@ -56,7 +56,7 @@ lzw_decompress("a.lzw")
 
 ## Test
 
-The project uses pytest and hypothesis as test framework. Property-based testing is adopted for flexibility and conciseness.
+The project uses pytest and hypothesis as test framework. Property-based testing is adopted in favor of its flexibility and conciseness.
 
 ```bash
 # Install test requirements

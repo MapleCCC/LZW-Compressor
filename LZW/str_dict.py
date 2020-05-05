@@ -32,13 +32,6 @@ class StrDict:
             self._str_cache.add(ascii2byte(i))
 
     def __contains__(self, item: int) -> bool:
-        # """ A versatile membership testing routine """
-        # if isinstance(item, int):
-        #     return item in self._storage
-        # elif isinstance(item, str):
-        #     return item in self._storage.values()
-        # else:
-        #     raise TypeError
         return item in self._storage
 
     def __getitem__(self, key: int) -> bytes:

@@ -17,7 +17,6 @@
 - Add test upon different code_bitsize
 - Add __all__ to modules
 - Add __slots__ to classes
-- Add license
 - Add docstring for all significant functions
 - Add docstring to module level
 - Add icons to badges.
@@ -77,3 +76,4 @@
 - Add badge for code style (black)
 - Remove .gitmodules
 - Expand all wildcard imports
+- Add license

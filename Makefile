@@ -14,7 +14,7 @@ test-cov:
 	# Alternatively, we can run: coverage run
 	coverage html
 	# TODO: possibly also open index.html in browser
-	python -m webbrowser -n htmlcov/index.html
+	# python -m webbrowser -n htmlcov/index.html
 
 lint:
 	# cd ${SRC_DIR} && pylint_runner rc
