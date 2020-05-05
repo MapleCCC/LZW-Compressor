@@ -22,7 +22,7 @@ def most_significant_bit_number(x: int) -> int:
     """
     if x < 0:
         raise NotImplementedError
-    return len(format(x, "b"))
+    return x.bit_length()
 
 
 # 31 -> b'\x31'
