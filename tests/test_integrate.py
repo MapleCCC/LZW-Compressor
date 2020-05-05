@@ -31,7 +31,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 @given(l=TEST_FILES_BUILD_STRATEGY)
 @example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
 @settings(deadline=None)
-def test_integration(l: List[bytes], tmp_path: Path) -> None:
+def test_integrate(l: List[bytes], tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
