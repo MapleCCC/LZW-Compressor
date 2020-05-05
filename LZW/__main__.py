@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from itertools import chain
 from typing import List
 
@@ -40,6 +41,14 @@ def decompress(archive: str):
 def lzw_compress(archive: str, files: List[str]):
     if not files:
         raise ValueError("At least one file is needed to be compressed into archive")
+
+    # Here is a surprising bug: if (archive in files) == True, then even if archive is
+    # originally non-existent, no exception is raised. This is due to lazy evaluation.
+    # One solution to this is to test file existence at the very first beginning, and fail early,
+    # to prevent surprising errors later on.
+    if not all(map(os.path.isfile, files)):
+        # FIXME
+        raise FileNotFoundError(f"Some files are non-existent: {files}")
 
     write_lzwfile_header(archive, files)
 
