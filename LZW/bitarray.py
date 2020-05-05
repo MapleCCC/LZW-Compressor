@@ -1,54 +1,60 @@
-from typing import Iterable, List, Union
+from typing import Union
 
 from .bit import Bit
-from .convert_bytes_bits_int import bits2bytes, bits2int, bytes2bits, int2bits
 
 
 # Mimic the interface of the builtin bytearray object
 class Bitarray:
-    def __init__(self, iterable: Iterable[Bit] = ()) -> None:
-        self._storage: List[Bit] = list(iterable)
+    def __init__(self) -> None:
+        self._data = 0
+        self._size = 0
 
-    __slots__ = ["_storage"]
+    __slots__ = ["_data", "_size"]
 
-    def __getitem__(self, key: Union[int, slice]) -> Union[Bit, "Bitarray"]:
-        if isinstance(key, int):
-            return Bit(self._storage[key])
-        elif isinstance(key, slice):
-            return Bitarray(self._storage[key])
+    # TODO: add support for more range of slice indices, such as negative index.
+    def __getitem__(self, index: Union[int, slice]) -> Union[Bit, "Bitarray"]:
+        if isinstance(index, int):
+            return (self._data >> (self._size - index - 1)) & 1
+        elif isinstance(index, slice):
+            start, stop = index.start, index.stop
+            if start is None:
+                start = 0
+            if stop is None:
+                stop = self._size
+            if not (start <= stop and start <= self._size and stop <= self._size):
+                raise IndexError(f"Invalid slice index: {start}:{stop}")
+            mask = (1 << (stop - start)) - 1
+            ret = Bitarray()
+            ret._data = (self._data >> (self._size - stop)) & mask
+            ret._size = stop - start
+            return ret
         else:
             raise TypeError
 
     def __len__(self) -> int:
         """ Return bit number """
-        return len(self._storage)
+        return self._size
 
     def __str__(self) -> str:
-        if len(self._storage) > 20:
-            return f"Bitarray({str(self._storage[:10])[:-1]}...{str(self._storage[-10:])[1:]})"
+        repre = self.__repr__()
+        if self._size > 20:
+            return "Bitarray({}...{})".format(repre[:10], repre[-10:])
         else:
-            return self.__repr__()
+            return repre
 
-    # Ensure that eval(repr(x)) == x
     def __repr__(self) -> str:
-        return f"Bitarray({self._storage})"
+        return "Bitarray({})".format(format(self._data, "b"))
 
     def __eq__(self, other: "Bitarray") -> bool:
-        return self._storage == other._storage
-
-    def __add__(self, other: "Bitarray") -> "Bitarray":
-        if not isinstance(other, Bitarray):
-            raise TypeError(
-                f"unsupported operand type(s) for +: 'Bitarray' and {type(other)}"
-            )
-        return Bitarray(self._storage + other._storage)
+        return self._data == other._data and self._size == other._size
 
     def __iadd__(self, other: "Bitarray") -> "Bitarray":
         if not isinstance(other, Bitarray):
             raise TypeError(
                 f"unsupported operand type(s) for +: 'Bitarray' and {type(other)}"
             )
-        self._storage.extend(other._storage)
+        self._data = (self._data << other._size) + other._data
+        self._size += other._size
         return self
 
     def to_int(self) -> int:
@@ -56,7 +62,7 @@ class Bitarray:
         Boundary Conditions:
         empty bits yield 0
         """
-        return bits2int(self._storage)
+        return self._data
 
     @classmethod
     def from_int(cls, x: int, bit_size: int = None) -> "Bitarray":
@@ -65,33 +71,33 @@ class Bitarray:
         0 yields empty bitarray
         negative integers yield exception
         """
-        _bits = int2bits(x)
+        if x < 0:
+            raise NotImplementedError
+
+        canonical_bit_len = x.bit_length()
         if bit_size:
-            if bit_size < len(_bits):
+            if bit_size < canonical_bit_len:
                 raise OverflowError
         else:
-            bit_size = len(_bits)
-        return cls([0] * (bit_size - len(_bits)) + _bits)
+            bit_size = canonical_bit_len
 
-    def extend(self, iterable: Iterable[Bit]) -> None:
-        self._storage.extend(iterable)
+        ret = Bitarray()
+        ret._data = x
+        ret._size = bit_size
+        return ret
 
     # No need to have both push_bytes_back and push_byte_back. One interface suffices
     def push_bytes_back(self, bs: bytes) -> None:
-        self._storage.extend(bytes2bits(bs))
+        for byte in bs:
+            self._data = (self._data << 8) + byte
+            self._size += 8
 
     # We can either implement pop_byte_front in terms of pop_bytes_from (top-down approach),
     # or implement pop_bytes_front in terms of pop_byte_front (bottom-up approach)
     def pop_byte_front(self) -> bytes:
-        if len(self._storage) < 8:
+        if self._size < 8:
             raise IndexError("pop byte from bitarray with less than 8 bits")
-        return self.pop_bytes_front(1)
-
-    def pop_bytes_front(self, n: int = 1) -> bytes:
-        if len(self._storage) < 8 * n:
-            raise IndexError(
-                "pop bytes number exceeds bitarray's containing bytes' number"
-            )
-        bs = bits2bytes(self._storage[: 8 * n])
-        self._storage = self._storage[8 * n :]
-        return bs
+        ret = (self._data >> (self._size - 8)).to_bytes(1, "big")
+        self._data &= (1 << (self._size - 8)) - 1
+        self._size -= 8
+        return ret
