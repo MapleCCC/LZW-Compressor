@@ -7,8 +7,8 @@ from typing import List
 import click
 from more_itertools import split_after
 
-from .config import CODE_BITSIZE, VIRTUAL_EOF
 from .codec import LZWDecoder, LZWEncoder
+from .config import CODE_BITSIZE, VIRTUAL_EOF
 from .lzwfile import (
     read_lzwfile_codes,
     read_lzwfile_header,

@@ -5,7 +5,7 @@ from pathlib import Path
 from random import sample
 from typing import List
 
-from hypothesis import given, example, settings
+from hypothesis import example, given, settings
 from hypothesis.strategies import binary, lists
 
 from LZW.__main__ import lzw_compress, lzw_decompress

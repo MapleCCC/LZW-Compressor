@@ -1,7 +1,4 @@
-from typing import AnyStr, Callable
-
-from .extra_itertools import iequal
-from .iostream import FileInStreamer
+from typing import Callable
 
 
 def undecorate(func: Callable) -> Callable:
