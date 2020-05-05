@@ -53,7 +53,7 @@ class LZWDecoder:
     def decode_file(self, filename: AnyStr, codes: Iterable[Code]) -> None:
         write_to_file_from_stream(self._decode(codes), filename, mode="wb")
 
-    def _decode(self, codes: Iterable[Code]) -> Iterator[Char]:
+    def _decode(self, codes: Iterable[Code]) -> Iterator[bytes]:
         P = b""
         for code in codes:
             if code == self._virtual_eof:

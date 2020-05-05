@@ -27,7 +27,7 @@ Header = Iterable[Entry]
 Code = int
 
 
-def read_lzwfile_header(lzwfile: AnyStr) -> Iterable[str]:
+def read_lzwfile_header(lzwfile: AnyStr) -> Header:
     with open(lzwfile, "rb") as f:
         entry = f.readline().strip()
         while entry != b"":

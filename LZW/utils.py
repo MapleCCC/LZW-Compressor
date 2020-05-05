@@ -4,6 +4,8 @@ from .extra_itertools import iequal
 from .iostream import FileInStreamer
 
 
+# TODO: Instead of testing equality with reading mode, why not just compute the hash digest and compare?
+# TODO: just compare in binary mode.
 def is_equal_file(*filenames: AnyStr, mode: str = "r", **kwargs) -> int:
     fs_itr = (FileInStreamer(filename, mode, **kwargs) for filename in filenames)
     return iequal(*fs_itr)

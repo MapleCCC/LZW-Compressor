@@ -13,7 +13,7 @@ from .utils import ascii2byte
 class CodeDict:
     def __init__(self, code_bitsize: int) -> None:
         if code_bitsize <= 8:
-            raise ValueError("Code bit size should larger than 8")
+            raise ValueError("Code bit size should be larger than 8")
 
         self._storage: Dict[bytes, int] = Trie()
         # The first 256 codes are reserved for ASCII characters

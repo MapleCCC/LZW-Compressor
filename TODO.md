@@ -1,5 +1,6 @@
 # TODO
 
+- Fix endian inconsistency problem
 - implement trie data structure to speedup performance
 - Try different advanced data structure. Refer to https://www.zhihu.com/question/32163076.
 - profile to find performance bottleneck, and try to optimize. So that we can set bigger value for MAX_TEST_FILE_NUM in test_integration.py
@@ -28,6 +29,7 @@
 - Use pytest-subtesthack plugin to deal with fixture integration problem.
 - Test on more max_file_len and max_file_num.
 - Type annotate tmp_path fixture argument
+  - Use path.pathlib.Path or Union[str, bytes, os.PathLike]
 - Try doctest
 - Should we pin dependencies' versions in requirements.txt?
   - https://nvie.com/posts/pin-your-packages/
