@@ -31,16 +31,17 @@ class LZWEncoder:
         # which could be expensive.
         # TODO: Try trie data structure instead.
 
-        P = b""
+        prefix = b""
         for char in text:
-            if P + char in self._code_dict:
-                P = P + char
+            current_word = prefix + char
+            if current_word in self._code_dict:
+                prefix = current_word
             else:
-                yield self._code_dict[P]
-                self._code_dict.add_new_code(P + char)
-                P = char
-        if P:
-            yield self._code_dict[P]
+                yield self._code_dict[prefix]
+                self._code_dict.add_new_code(current_word)
+                prefix = char
+        if prefix:
+            yield self._code_dict[prefix]
 
 
 class LZWDecoder:
@@ -54,16 +55,18 @@ class LZWDecoder:
         write_to_file_from_stream(self._decode(codes), filename, mode="wb")
 
     def _decode(self, codes: Iterable[Code]) -> Iterator[bytes]:
-        P = b""
+        prefix = b""
         for code in codes:
             if code == self._virtual_eof:
                 break
             if code in self._str_dict:
-                if P:
-                    self._str_dict.add_new_str(P + getbyte(self._str_dict[code], 0))
-                P = self._str_dict[code]
+                if prefix:
+                    current_word = prefix + getbyte(self._str_dict[code], 0)
+                    self._str_dict.add_new_str(current_word)
+                prefix = self._str_dict[code]
                 yield self._str_dict[code]
             else:
-                self._str_dict.add_new_str(P + getbyte(P, 0))
-                yield P + getbyte(P, 0)
-                P = P + getbyte(P, 0)
+                current_word = prefix + getbyte(prefix, 0)
+                self._str_dict.add_new_str(current_word)
+                yield current_word
+                prefix = current_word
