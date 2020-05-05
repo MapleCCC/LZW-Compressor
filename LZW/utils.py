@@ -20,7 +20,7 @@ def ascii2byte(x: int) -> bytes:
     return x.to_bytes(1, "big")
 
 
-def byte2ascii(b: bytes) -> int:
+def byte2ascii(b: bytes) -> int:  # pragma: no cover
     if len(b) != 1:
         raise ValueError
     return int.from_bytes(b, "big")
