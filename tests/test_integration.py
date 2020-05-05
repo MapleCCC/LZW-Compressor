@@ -1,6 +1,6 @@
 import os
-import shutil
 import uuid
+from pathlib import Path
 from random import sample
 from typing import List
 
@@ -8,7 +8,7 @@ from hypothesis import given, example, settings
 from hypothesis.strategies import binary, lists, builds
 
 from LZW.__main__ import lzw_compress, lzw_decompress
-from LZW.utils import is_equal_file, ascii2byte
+from LZW.utils import ascii2byte
 
 MAX_TEST_FILE_LEN = 10000
 MAX_NUM_TEST_FILES = 3  # TODO: increase number of test files
@@ -31,7 +31,7 @@ EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
 @given(l=TEST_FILES_BUILD_STRATEGY)
 @example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
 @settings(deadline=None)
-def test_integration(l: List[bytes], tmp_path) -> None:
+def test_integration(l: List[bytes], tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -39,17 +39,16 @@ def test_integration(l: List[bytes], tmp_path) -> None:
     subpath.mkdir()
     os.chdir(subpath)
 
-    test_files = [f"file{i}" for i in range(len(l))]
+    test_files = [Path(f"file{i}") for i in range(len(l))]
     for test_file, s in zip(test_files, l):
-        with open(test_file, "wb") as f:
-            f.write(s)
+        test_file.write_bytes(s)
 
-    lzw_compress("a.lzw", test_files)
+    lzw_compress("a.lzw", [str(x) for x in test_files])
 
     for test_file in test_files:
-        shutil.move(test_file, test_file + "old")
+        test_file.unlink()
 
     lzw_decompress("a.lzw")
 
-    for test_file in test_files:
-        assert is_equal_file(test_file, test_file + "old", mode="rb")
+    for test_file, s in zip(test_files, l):
+        assert test_file.read_bytes() == s

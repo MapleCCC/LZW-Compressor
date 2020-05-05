@@ -1,5 +1,6 @@
 import os
 import uuid
+from pathlib import Path
 from random import sample
 
 from hypothesis import example, given, settings
@@ -7,7 +8,7 @@ from hypothesis.strategies import binary
 
 from LZW.codec import LZWDecoder, LZWEncoder
 from LZW.pep467 import iterbytes
-from LZW.utils import ascii2byte, is_equal_file
+from LZW.utils import ascii2byte
 
 MAX_FILE_LEN = 10000
 CODE_BITSIZE = 12
@@ -32,7 +33,7 @@ def test_encode_decode(s: bytes) -> None:
 @given(s=binary(max_size=MAX_FILE_LEN))
 @example(s=EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW)
 @settings(deadline=None)
-def test_encode_decode_file(s: bytes, tmp_path) -> None:
+def test_encode_decode_file(s: bytes, tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation
     # Because every hypothesis' example of the test function share the same
     # tmp_path fixture instance, which is undesirable for some test cases.
@@ -40,14 +41,13 @@ def test_encode_decode_file(s: bytes, tmp_path) -> None:
     subpath.mkdir()
     os.chdir(subpath)
 
-    original_filename = "file0"
-    decoded_filename = "file0_decoded"
+    original_file = Path("file0")
+    decoded_file = Path("file0_decoded")
 
-    with open(original_filename, "wb") as f:
-        f.write(s)
+    original_file.write_bytes(s)
 
     encoder = LZWEncoder(CODE_BITSIZE)
     decoder = LZWDecoder(CODE_BITSIZE)
-    codes = encoder.encode_file(original_filename)
-    decoder.decode_file(decoded_filename, codes)
-    assert is_equal_file(original_filename, decoded_filename, mode="rb")
+    codes = encoder.encode_file(str(original_file))
+    decoder.decode_file(str(decoded_file), codes)
+    assert original_file.read_bytes() == decoded_file.read_bytes()
