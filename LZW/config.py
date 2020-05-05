@@ -1,0 +1,4 @@
+__all__ = ["CODE_BITSIZE", "VIRTUAL_EOF"]
+
+CODE_BITSIZE: int = 12
+VIRTUAL_EOF: int = 2 ** CODE_BITSIZE - 1

@@ -6,6 +6,7 @@ from typing import List
 import click
 from more_itertools import split_after
 
+from .config import CODE_BITSIZE, VIRTUAL_EOF
 from .codec import LZWDecoder, LZWEncoder
 from .lzwfile import (
     read_lzwfile_codes,
@@ -16,10 +17,6 @@ from .lzwfile import (
 
 # import fire
 # import argparse
-
-
-CODE_BITSIZE: int = 12
-VIRTUAL_EOF: int = 2 ** CODE_BITSIZE - 1
 
 
 @click.group()
