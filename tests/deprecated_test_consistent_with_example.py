@@ -6,10 +6,9 @@ from random import sample
 from typing import List
 
 from hypothesis import given, settings, example
-from hypothesis.strategies import binary, lists, builds
+from hypothesis.strategies import binary, lists
 
 from LZW.__main__ import lzw_compress, lzw_decompress
-from LZW.utils import ascii2byte
 
 EXAMPLE_EXE = os.path.join(os.getcwd(), "lzw_example_win.exe")
 
@@ -28,17 +27,14 @@ TEST_FILES_BUILD_STRATEGY = lists(
 
 # TODO: add test case for code dict overflow
 # All possible one-length bytes
-VALID_CHARSET = [ascii2byte(i) for i in range(256)]
-OVERFLOW_TEST_EXAMPLE_STRATEGY = builds(
-    lambda: b"".join(b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20))
-)
+VALID_CHARSET = [i.to_bytes(1, "big") for i in range(256)]
 EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
     b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20)
 )
 
 
 @given(l=TEST_FILES_BUILD_STRATEGY)
-@example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * 3)
+@example(l=[EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW] * MAX_NUM_TEST_FILES)
 @settings(deadline=None)
 def test_compression(l: List[bytes], tmp_path: Path) -> None:
     # We need to intentionally create a unique subpath for each function invocation

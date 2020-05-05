@@ -8,13 +8,12 @@ from hypothesis.strategies import binary
 
 from LZW.codec import LZWDecoder, LZWEncoder
 from LZW.pep467 import iterbytes
-from LZW.utils import ascii2byte
 
 MAX_FILE_LEN = 10000
 CODE_BITSIZE = 12
 
 # All possible one-length bytes
-VALID_CHARSET = [ascii2byte(i) for i in range(256)]
+VALID_CHARSET = [i.to_bytes(1, "big") for i in range(256)]
 
 EXAMPLE_TEXT_TEST_CODE_DICT_OVERFLOW = b"".join(
     b"".join(sample(VALID_CHARSET, k=256)) for _ in range(20)
