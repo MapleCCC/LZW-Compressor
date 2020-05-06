@@ -23,7 +23,6 @@ class Bitarray:
     def _(self, index: int) -> Bit:
         return Bit((self._data >> (self._size - index - 1)) & 1)
 
-    # TODO: add support for more range of slice indices, such as negative index.
     # TODO: change type hint "Bitarray" to Bitarray after the bug of incompatibility
     # between functools.singledispatchmethod and __future__.annotations is resolved.
     @__getitem__.register
@@ -33,8 +32,14 @@ class Bitarray:
             start = 0
         if stop is None:
             stop = self._size
-        if not (start <= stop and start <= self._size and stop <= self._size):
-            raise IndexError(f"Invalid slice index: {start}:{stop}")
+        if start < 0:
+            start += self._size
+        if stop < 0:
+            stop += self._size
+
+        if not (start <= stop and start < self._size and stop <= self._size):
+            return Bitarray()
+
         mask = (1 << (stop - start)) - 1
         ret = Bitarray()
         ret._data = (self._data >> (self._size - stop)) & mask
