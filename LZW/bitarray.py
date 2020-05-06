@@ -1,4 +1,5 @@
-from typing import Union
+from functools import singledispatchmethod
+from typing import NoReturn
 
 from .bit import Bit
 
@@ -11,25 +12,29 @@ class Bitarray:
 
     __slots__ = ["_data", "_size"]
 
+    @singledispatchmethod
+    def __getitem__(self, index) -> NoReturn:
+        raise TypeError
+
+    @__getitem__.register
+    def _(self, index: int) -> Bit:
+        return Bit((self._data >> (self._size - index - 1)) & 1)
+
     # TODO: add support for more range of slice indices, such as negative index.
-    def __getitem__(self, index: Union[int, slice]) -> Union[Bit, "Bitarray"]:
-        if isinstance(index, int):
-            return (self._data >> (self._size - index - 1)) & 1
-        elif isinstance(index, slice):
-            start, stop = index.start, index.stop
-            if start is None:
-                start = 0
-            if stop is None:
-                stop = self._size
-            if not (start <= stop and start <= self._size and stop <= self._size):
-                raise IndexError(f"Invalid slice index: {start}:{stop}")
-            mask = (1 << (stop - start)) - 1
-            ret = Bitarray()
-            ret._data = (self._data >> (self._size - stop)) & mask
-            ret._size = stop - start
-            return ret
-        else:
-            raise TypeError
+    @__getitem__.register
+    def _(self, index: slice) -> "Bitarray":
+        start, stop = index.start, index.stop
+        if start is None:
+            start = 0
+        if stop is None:
+            stop = self._size
+        if not (start <= stop and start <= self._size and stop <= self._size):
+            raise IndexError(f"Invalid slice index: {start}:{stop}")
+        mask = (1 << (stop - start)) - 1
+        ret = Bitarray()
+        ret._data = (self._data >> (self._size - stop)) & mask
+        ret._size = stop - start
+        return ret
 
     def __len__(self) -> int:
         """ Return bit number """
