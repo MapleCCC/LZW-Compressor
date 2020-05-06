@@ -1,3 +1,6 @@
+# TODO: remove the future statement in Python 4.0
+from __future__ import annotations
+
 from functools import singledispatchmethod
 from typing import NoReturn
 
@@ -21,6 +24,8 @@ class Bitarray:
         return Bit((self._data >> (self._size - index - 1)) & 1)
 
     # TODO: add support for more range of slice indices, such as negative index.
+    # TODO: change type hint "Bitarray" to Bitarray after the bug of incompatibility
+    # between functools.singledispatchmethod and __future__.annotations is resolved.
     @__getitem__.register
     def _(self, index: slice) -> "Bitarray":
         start, stop = index.start, index.stop
@@ -50,10 +55,10 @@ class Bitarray:
     def __repr__(self) -> str:
         return "Bitarray({})".format(format(self._data, "b"))
 
-    def __eq__(self, other: "Bitarray") -> bool:
+    def __eq__(self, other: Bitarray) -> bool:
         return self._data == other._data and self._size == other._size
 
-    def __iadd__(self, other: "Bitarray") -> "Bitarray":
+    def __iadd__(self, other: Bitarray) -> Bitarray:
         if not isinstance(other, Bitarray):
             raise TypeError(
                 f"unsupported operand type(s) for +: 'Bitarray' and {type(other)}"
@@ -70,7 +75,7 @@ class Bitarray:
         return self._data
 
     @classmethod
-    def from_int(cls, x: int, bit_size: int = None) -> "Bitarray":
+    def from_int(cls, x: int, bit_size: int = None) -> Bitarray:
         """
         Boundary Conditions:
         0 yields empty bitarray
