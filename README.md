@@ -17,6 +17,14 @@ Internal algorithm processes byte data. So it's applicable to any file types, be
 
 Prerequisites: Python>=3.6, [Git](https://git-scm.com/), [pip](https://pip.pypa.io/en/stable/).
 
+One-liner installation recipe:
+
+```bash
+$ pip install git+https://github.com/MapleCCC/LZW-Compressor.git#egg=LZW-Compressor
+```
+
+If editable mode installation is preferred:
+
 ```bash
 $ git clone https://github.com/MapleCCC/LZW-Compressor.git
 
@@ -79,5 +87,3 @@ $ make test-cov
 
 [![WTFPL](http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-1.png)](http://www.wtfpl.net/)
 <!-- <a href="http://www.wtfpl.net/"><img src="http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png" width="80" height="15" alt="WTFPL" /></a> -->
-
-Except those that are done by CUHK CSCI3280 2020 Spring teaching team, whose work is in the first commit.
