@@ -32,7 +32,7 @@ check-unused-imports:
 cui: check-unused-imports
 
 todo:
-	grep -ri --include=*.py TODO
+	rg -ri TODO
 
 reformat:
 	# executing "isort ." command yields failure, why? TODO: try to deal with it.

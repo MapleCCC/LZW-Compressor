@@ -20,25 +20,18 @@ Prerequisites: Python>=3.6, [Git](https://git-scm.com/), [pip](https://pip.pypa.
 One-liner installation recipe:
 
 ```bash
-$ pip install git+https://github.com/MapleCCC/LZW-Compressor.git#egg=LZW-Compressor
+$ python -m pip install git+https://github.com/MapleCCC/LZW-Compressor.git#egg=LZW-Compressor
 ```
 
 If editable mode installation is preferred:
 
 ```bash
-$ git clone https://github.com/MapleCCC/LZW-Compressor.git
-
-$ cd LZW-Compressor
-
 # You can optionally create a virtual environment for isolation purpose
 $ python -m virtualenv .venv
 $ source .venv/Scripts/activate
 
-# Install requirements
-$ python -m pip install -r requirements.txt
-
 # Install in editable mode
-$ python -m pip install -e .  # Mind the dot at the end
+$ python -m pip install -e git+https://github.com/MapleCCC/LZW-Compressor.git#egg=LZW-Compressor
 ```
 
 ## Usage

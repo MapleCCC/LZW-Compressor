@@ -51,6 +51,9 @@
     - https://docs.python.org/3.8/library/typing.html#typing.ByteString
   - pin your pip requirements/dependencies
     - https://nvie.com/posts/pin-your-packages/
+- Add README badge for LOC (Line of Codes)
+- Add README badge for pylint rating. (10.0/10)
+
 
 # Done
 
