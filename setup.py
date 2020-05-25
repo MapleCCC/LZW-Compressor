@@ -20,7 +20,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=open("requirements.txt", "r").read().splitlines(),
     entry_points={"console_scripts": ["lzw=LZW.__main__:main",]},
 )
