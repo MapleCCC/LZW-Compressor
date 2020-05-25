@@ -15,7 +15,7 @@ Internal algorithm processes byte data. So it's applicable to any file types, be
 
 ## Installation
 
-Prerequisites: Python>=3.7, [Git](https://git-scm.com/), [pip](https://pip.pypa.io/en/stable/).
+Prerequisites: Python>=3.8, [Git](https://git-scm.com/), [pip](https://pip.pypa.io/en/stable/).
 
 One-liner installation recipe:
 
