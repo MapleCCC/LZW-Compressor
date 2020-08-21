@@ -26,7 +26,7 @@ class Bitarray:
     # TODO: change type hint "Bitarray" to Bitarray after the bug of incompatibility
     # between functools.singledispatchmethod and __future__.annotations is resolved.
     @__getitem__.register
-    def _(self, index: slice) -> "Bitarray":
+    def _(self, index: slice) -> Bitarray:
         start, stop = index.start, index.stop
         if start is None:
             start = 0
