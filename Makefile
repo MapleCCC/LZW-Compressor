@@ -35,8 +35,7 @@ todo:
 	rg TODO
 
 reformat:
-	# executing "isort ." command yields failure, why? TODO: try to deal with it.
-	find ${SRC_DIR} ${TEST_DIR} -type f -name "*.py" | xargs isort
+	isort --apply
 	black .
 
 # TODO: recursively remove pycache folders
