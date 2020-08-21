@@ -16,7 +16,7 @@ class Bitarray:
     __slots__ = ["_data", "_size"]
 
     @singledispatchmethod
-    def __getitem__(self, index) -> NoReturn:
+    def __getitem__(self, index: object) -> NoReturn:
         raise TypeError
 
     @__getitem__.register

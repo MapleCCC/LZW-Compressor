@@ -21,24 +21,24 @@ from .lzwfile import (
 
 
 @click.group()
-def main():
+def main() -> None:
     pass
 
 
 @main.command()
 @click.option("-o", "--output", "archive", default="a.lzw")
 @click.argument("files", nargs=-1)
-def compress(archive: str, files: List[str]):
+def compress(archive: str, files: List[str]) -> None:
     lzw_compress(archive, files)
 
 
 @main.command()
 @click.argument("archive")
-def decompress(archive: str):
+def decompress(archive: str) -> None:
     lzw_decompress(archive)
 
 
-def lzw_compress(archive: str, files: List[str]):
+def lzw_compress(archive: str, files: List[str]) -> None:
     if not files:
         raise ValueError("At least one file is needed to be compressed into archive")
 
@@ -57,7 +57,7 @@ def lzw_compress(archive: str, files: List[str]):
     write_lzwfile_codes(archive, codes, CODE_BITSIZE)
 
 
-def lzw_decompress(archive: str):
+def lzw_decompress(archive: str) -> None:
     filenames = read_lzwfile_header(archive)
     codes_list = split_after(
         read_lzwfile_codes(archive, CODE_BITSIZE), lambda x: x == VIRTUAL_EOF

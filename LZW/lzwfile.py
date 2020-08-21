@@ -69,7 +69,7 @@ def read_lzwfile_codes(lzwfile: AnyStr, code_size: int) -> Iterator[Code]:
 
 
 def write_lzwfile_codes(lzwfile: AnyStr, codes: Iterable[Code], code_size: int) -> None:
-    def _write_codes(f: BinaryIO):
+    def _write_codes(f: BinaryIO) -> None:
         buffer = Bitarray()
 
         for code in codes:
