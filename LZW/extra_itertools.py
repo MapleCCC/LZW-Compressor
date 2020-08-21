@@ -1,5 +1,5 @@
 from itertools import chain, zip_longest
-from typing import Any, Callable, Iterable
+from typing import Any, Iterable
 
 from more_itertools import all_equal
 
@@ -20,8 +20,4 @@ def iequal(*iterables: Iterable) -> bool:
     return all(map(lambda x: all_equal(x), zipped))
 
 
-_iequal_from_iterable: Callable[[Iterable[Iterable]], bool] = lambda iterables: iequal(
-    *iterables
-)
-
-iequal.from_iterable = _iequal_from_iterable
+iequal.from_iterable = lambda iterables: iequal(*iterables)
