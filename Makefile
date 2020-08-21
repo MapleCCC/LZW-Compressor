@@ -35,7 +35,7 @@ todo:
 	rg TODO
 
 reformat:
-	isort --apply
+	isort .
 	black .
 
 # TODO: recursively remove pycache folders
