@@ -2,13 +2,10 @@ from typing import Callable
 
 
 def undecorate(func: Callable) -> Callable:
-    ret = func
-    while True:
-        try:
-            ret = ret.__wrapped__
-        except AttributeError:
-            break
-    return ret
+    undecorated = func
+    while hasattr(undecorated, "__wrapped__"):
+        undecorated = undecorated.__wrapped__
+    return undecorated
 
 
 def ascii2byte(x: int) -> bytes:
