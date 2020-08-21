@@ -1,4 +1,4 @@
-from typing import AnyStr, Iterable, Iterator
+from typing import Iterable, Iterator
 
 from .code_dict import CodeDict
 from .extra_itertools import iappend
@@ -20,7 +20,7 @@ class LZWEncoder:
 
     __slots__ = ["_code_dict", "_virtual_eof"]
 
-    def encode_file(self, filename: AnyStr) -> Iterable[Code]:
+    def encode_file(self, filename: str) -> Iterable[Code]:
         fs = FileInStreamer(filename, mode="rb")
         return iappend(self._encode(fs), self._virtual_eof)
 
@@ -51,7 +51,7 @@ class LZWDecoder:
 
     __slots__ = ["_str_dict", "_virtual_eof"]
 
-    def decode_file(self, filename: AnyStr, codes: Iterable[Code]) -> None:
+    def decode_file(self, filename: str, codes: Iterable[Code]) -> None:
         write_to_file_from_stream(self._decode(codes), filename, mode="wb")
 
     def _decode(self, codes: Iterable[Code]) -> Iterator[bytes]:
