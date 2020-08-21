@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from functools import singledispatchmethod
-from typing import NoReturn
+from typing import Any, NoReturn
 
 from .bit import Bit
 
@@ -60,7 +60,9 @@ class Bitarray:
     def __repr__(self) -> str:
         return "Bitarray({})".format(format(self._data, "b"))
 
-    def __eq__(self, other: Bitarray) -> bool:
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Bitarray):
+            raise NotImplemented
         return self._data == other._data and self._size == other._size
 
     def __iadd__(self, other: Bitarray) -> Bitarray:
