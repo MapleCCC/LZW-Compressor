@@ -28,8 +28,5 @@ exclude_lines =
     except
     raise
 
-    # Don't complain if not-implemented code isn't run:
-    pass
-
     # Too tedious to cover __str__ implementations:
     def __str__
